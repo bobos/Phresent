@@ -1,4 +1,4 @@
-UP
+Phresent
 ==
 
-Universal Presentation System
+Presentation with your smart Phone
