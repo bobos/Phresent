@@ -27,20 +27,48 @@
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
+
+    // Load first page
+    $.get("api/slides/first", function(content) {
+        $("#present").html(content);
+    });
         var pageNumber = 1;
         $("#previous").on("click", function() {
             if (pageNumber == 1) {
                 console.log("No previous page!");
             }
+            else {
+                var loadPage = pageNumber - 1;
+                socket.emit('load previous page', loadPage);
+                return false;
+            }
         });
+
         $("#next").on("click", function() {
             var loadPage = pageNumber + 1;
-            socket.emit('load page', loadPage);
+            socket.emit('load next page', loadPage);
             return false;
         });
+
       var socket = io();
-        socket.on('load page', function(content) {
-            $('#present').html(content);
+        socket.on('load next page', function(content) {
+            if (content == "NOT EXIST") {
+                console.log("It's the end!");
+            }
+            else {
+                $('#present').html(content);
+                pageNumber += 1;
+            }
+        });
+
+        socket.on('load previous page', function(content) {
+            if (content == "NOT EXIST") {
+                console.log("It's the begining!");
+            }
+            else {
+                $("#present").html(content);
+                pageNumber -= 1;
+            }
         });
       $('form').submit(function(){
         socket.emit('chat message', $('#m').val());

@@ -19,23 +19,52 @@ app.get('/lib/img/next.png', function(req, res) {
     res.writeHead(200, {'Content-ype': 'image/gif'});
     res.end(img, 'binary');
 });
+
+app.get('/api/slides/first', function(req, res) {
+    fs.readFile('slides/1.html', 'utf-8', function(err, data) {
+            if (err) {
+                res.writeHead(200, {"Content-Type": "text/html"});
+                res.write("OPPPPS");
+                res.end();
+            }
+            else {
+                console.log(data);
+                res.writeHead(200, {"Content-Type": "text/html"});
+                res.write(data);
+                res.end();
+            }
+        });
+
+});
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
   });
 
-    socket.on('load page', function(pagename) {
+    socket.on('load next page', function(pagename) {
         fs.readFile('slides/' + pagename.toString() + '.html', 'utf-8', function(err, data) {
             if (err) {
-                console.log(err);
-                io.emit('load page', 'NOT EXIST');
+                io.emit('load next page', 'NOT EXIST');
             }
             else {
                 console.log(data);
-                io.emit('load page', data);
+                io.emit('load next page', data);
             }
         });
     });
+
+    socket.on('load previous page', function(pagename) {
+        fs.readFile('slides/' + pagename.toString() + '.html', 'utf-8', function(err, data) {
+            if (err) {
+                io.emit('load previous page', 'NOT EXIST');
+            }
+            else {
+                console.log(data);
+                io.emit('load previous page', data);
+            }
+        });
+    });
+
 });
 
 http.listen(3000, function(){
