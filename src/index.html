@@ -11,17 +11,37 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
+      #present {width: 800px; height: 600px; margin: 0 auto; margin-top: -200px}
+      #previous {background-image: url(/lib/img/previous.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; margin-top: 300px;}
+      #previous:hover {background-position: 0 -44px;}
+      #next {background-image: url(/lib/img/next.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; float:right; margin-top: -444px;}
+      #next:hover {background-position: 0 -44px;}
+
     </style>
   </head>
   <body>
     <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+    <a id="previous">prev</a>
+    <div id="present">html</div>
+    <a id="next">next</a>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
+        var pageNumber = 1;
+        $("#previous").on("click", function() {
+            if (pageNumber == 1) {
+                console.log("No previous page!");
+            }
+        });
+        $("#next").on("click", function() {
+            var loadPage = pageNumber + 1;
+            socket.emit('load page', loadPage);
+            return false;
+        });
       var socket = io();
+        socket.on('load page', function(content) {
+            $('#present').html(content);
+        });
       $('form').submit(function(){
         socket.emit('chat message', $('#m').val());
         $('#m').val('');
