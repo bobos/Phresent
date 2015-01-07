@@ -32,21 +32,13 @@
     $.get("api/slides/first", function(content) {
         $("#present").html(content);
     });
-        var pageNumber = 1;
         $("#previous").on("click", function() {
-            if (pageNumber == 1) {
-                console.log("No previous page!");
-            }
-            else {
-                var loadPage = pageNumber - 1;
-                socket.emit('load previous page', loadPage);
-                return false;
-            }
+            socket.emit('load previous page', 'prevous');
+            return false;
         });
 
         $("#next").on("click", function() {
-            var loadPage = pageNumber + 1;
-            socket.emit('load next page', loadPage);
+            socket.emit('load next page', 'next');
             return false;
         });
 
@@ -57,7 +49,6 @@
             }
             else {
                 $('#present').html(content);
-                pageNumber += 1;
             }
         });
 
@@ -67,7 +58,6 @@
             }
             else {
                 $("#present").html(content);
-                pageNumber -= 1;
             }
         });
       $('form').submit(function(){

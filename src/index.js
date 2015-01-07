@@ -3,6 +3,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var pageNumber = 1;
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
@@ -21,7 +22,7 @@ app.get('/lib/img/next.png', function(req, res) {
 });
 
 app.get('/api/slides/first', function(req, res) {
-    fs.readFile('slides/1.html', 'utf-8', function(err, data) {
+    fs.readFile('slides/' + pageNumber + '.html', 'utf-8', function(err, data) {
             if (err) {
                 res.writeHead(200, {"Content-Type": "text/html"});
                 res.write("OPPPPS");
@@ -42,25 +43,29 @@ io.on('connection', function(socket){
   });
 
     socket.on('load next page', function(pagename) {
-        fs.readFile('slides/' + pagename.toString() + '.html', 'utf-8', function(err, data) {
+        fs.readFile('slides/' + (pageNumber + 1).toString() + '.html', 'utf-8', function(err, data) {
             if (err) {
                 io.emit('load next page', 'NOT EXIST');
             }
             else {
                 console.log(data);
                 io.emit('load next page', data);
+                pageNumber += 1;
+                console.log(pageNumber);
             }
         });
     });
 
     socket.on('load previous page', function(pagename) {
-        fs.readFile('slides/' + pagename.toString() + '.html', 'utf-8', function(err, data) {
+        fs.readFile('slides/' + (pageNumber - 1).toString() + '.html', 'utf-8', function(err, data) {
             if (err) {
                 io.emit('load previous page', 'NOT EXIST');
             }
             else {
                 console.log(data);
                 io.emit('load previous page', data);
+                pageNumber -= 1;
+                console.log(pageNumber);
             }
         });
     });
