@@ -21,6 +21,12 @@ app.get('/lib/img/next.png', function(req, res) {
     res.end(img, 'binary');
 });
 
+app.get('/lib/img/question.png', function(req, res) {
+    var img = fs.readFileSync('lib/img/question.png');
+    res.writeHead(200, {'Content-ype': 'image/gif'});
+    res.end(img, 'binary');
+});
+
 app.get('/api/slides/first', function(req, res) {
     fs.readFile('slides/' + pageNumber + '.html', 'utf-8', function(err, data) {
             if (err) {
