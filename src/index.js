@@ -43,6 +43,12 @@ presenterChannel.on('connection', function(socket){
   socket.on(askSlide, function(incr) {
     load_slide(pageNumber + parseInt(incr), true, socket);
     });
+
+  socket.on('ask question', function(question) {
+    questions.push(question);
+    console.log(question);
+    socket.emit('change question number', questions.length);
+    });
 });
 
 /*
@@ -55,19 +61,6 @@ audienceChannel.on('connection', function(socket){
     load_slide(parseInt(num), false, socket)
     });
 });
-
-/*
- * audience channel
- */
-var questionChannel = io.of('/questionChannel');
-questionChannel.on('connection', function(socket){
-    socket.on('ask question', function(question) {
-        questions.push(question);
-        console.log(question);
-        socket.emit('change question number', questions.length);
-    });
-});
-
 
 http.listen(3000, function(){
   console.log('listening on *:3000');

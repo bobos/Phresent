@@ -35,7 +35,6 @@
     });
     
     var channel = io('/presenterChannel');
-    var Qchannel = io('/questionChannel');
     var askSlide = 'load slide';
 
     // Load first page
@@ -51,18 +50,18 @@
     });
 
     channel.on(askSlide, function(content) {
-            if (content != "THE END") {
-                $('#present').html(content);
-            }
+        if (content != "THE END") {
+            $('#present').html(content);
+        }
     });
 
-    Qchannel.on('change question number', function(number) {
-            if (number == 0) {
-                $("#number").html("0");
-            }
-            else {
-                $("#number").html(number.toString());
-            }
+    channel.on('change question number', function(number) {
+        if (number == 0) {
+            $("#number").html("0");
+        }
+        else {
+            $("#number").html(number.toString());
+        }
     });
     </script>
   </body>
