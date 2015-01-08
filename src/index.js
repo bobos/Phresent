@@ -5,7 +5,11 @@ var io = require('socket.io')(http);
 
 var pageNumber = 1;
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/phresent.html');
+});
+
+app.get('/audienceChannel', function(req, res){
+  res.sendFile(__dirname + '/audience.html');
 });
 
 // images, js, css etc.  
@@ -13,57 +17,37 @@ app.get('/lib/*', function(req, res){
   res.sendFile(__dirname + '/lib/' + req.params[0]);
 });
 
-app.get('/api/slides/first', function(req, res) {
-    fs.readFile('slides/' + pageNumber + '.html', 'utf-8', function(err, data) {
-            if (err) {
-                res.writeHead(200, {"Content-Type": "text/html"});
-                res.write("OOOOPS");
-                res.end();
-            }
-            else {
-                console.log(data);
-                res.writeHead(200, {"Content-Type": "text/html"});
-                res.write(data);
-                res.end();
-            }
-        });
+var askSlide = 'load slide'
+function load_slide(pageNum, isPresenter, socket) {
+  fs.readFile('slides/' + pageNum + '.html', 'utf-8', function(err, data) {
+      var msg = data;
+      if (err) { msg = 'THE END'; }
+      if (!err && isPresenter) { pageNumber = parseInt(pageNum); }
+      socket.emit(askSlide, msg);
+  });
+}
 
-});
-
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+/*
+ * presenter channel
+ */
+var presenterChannel = io.of('/presenterChannel');
+presenterChannel.on('connection', function(socket){
+  // load slide request from presenter
+  socket.on(askSlide, function(incr) {
+    load_slide(pageNumber + parseInt(incr), true, socket);
+    });
   });
 
-    socket.on('load next page', function(pagename) {
-        fs.readFile('slides/' + (pageNumber + 1).toString() + '.html', 'utf-8', function(err, data) {
-            if (err) {
-                io.emit('load next page', 'NOT EXIST');
-            }
-            else {
-                console.log(data);
-                io.emit('load next page', data);
-                pageNumber += 1;
-                console.log(pageNumber);
-            }
-        });
+/*
+ * audience channel
+ */
+var audienceChannel = io.of('/audienceChannel');
+audienceChannel.on('connection', function(socket){
+// load slide request from audience
+  socket.on(askSlide, function(num) {
+    load_slide(parseInt(num), false, socket)
     });
-
-    socket.on('load previous page', function(pagename) {
-        fs.readFile('slides/' + (pageNumber - 1).toString() + '.html', 'utf-8', function(err, data) {
-            if (err) {
-                io.emit('load previous page', 'NOT EXIST');
-            }
-            else {
-                console.log(data);
-                io.emit('load previous page', data);
-                pageNumber -= 1;
-                console.log(pageNumber);
-            }
-        });
-    });
-
-});
+  });
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
