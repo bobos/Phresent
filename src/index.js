@@ -8,30 +8,16 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/lib/img/previous.png', function(req, res) {
-    var img = fs.readFileSync('lib/img/previous.png');
-    res.writeHead(200, {'Content-ype': 'image/gif'});
-    res.end(img, 'binary');
-});
-
-
-app.get('/lib/img/next.png', function(req, res) {
-    var img = fs.readFileSync('lib/img/next.png');
-    res.writeHead(200, {'Content-ype': 'image/gif'});
-    res.end(img, 'binary');
-});
-
-app.get('/lib/img/question.png', function(req, res) {
-    var img = fs.readFileSync('lib/img/question.png');
-    res.writeHead(200, {'Content-ype': 'image/gif'});
-    res.end(img, 'binary');
+// images, js, css etc.  
+app.get('/lib/*', function(req, res){
+  res.sendFile(__dirname + '/lib/' + req.params[0]);
 });
 
 app.get('/api/slides/first', function(req, res) {
     fs.readFile('slides/' + pageNumber + '.html', 'utf-8', function(err, data) {
             if (err) {
                 res.writeHead(200, {"Content-Type": "text/html"});
-                res.write("OPPPPS");
+                res.write("OOOOPS");
                 res.end();
             }
             else {
@@ -43,6 +29,7 @@ app.get('/api/slides/first', function(req, res) {
         });
 
 });
+
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);

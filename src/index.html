@@ -19,6 +19,8 @@
       #question {position: absolute; top: 1%; right:1%;}
 
     </style>
+    <script src="/lib/js/socket.io-1.2.0.js"></script>
+    <script src="/lib/js/jquery-1.11.1.js"></script>
   </head>
   <body>
     <ul id="messages"></ul>
@@ -27,9 +29,16 @@
     <a id="next">next</a>
 
     <img id="question" src="/lib/img/question.png"></img>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
+    $(document).init(function(){
+      if(!("WebSocket" in window))
+      {
+        alert("OOPS your browser does NOT support websocket, Phresent won't " +
+              "work on this browser, please upgrade your browser or try " + 
+              "another browser.\r\n\r\n" +
+              "Your browser information:" + navigator.userAgent)
+      }
+    });
 
     // Load first page
     $.get("api/slides/first", function(content) {
