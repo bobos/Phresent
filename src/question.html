@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/lib/css/jquery-ui.css">
+        <style>
+        
+        </style>
+        <script src="/lib/js/socket.io-1.2.0.js"></script>
+        <script src="/lib/js/jquery-1.11.1.js"></script>
+        <script src="/lib/js/jquery-ui.js"></script>
+        <script>
+            $(function() {
+                var socket = io();
+
+                function submitQuestion() {
+                    var content = $( "#content" ).val();
+                    socket.emit('ask question', content);
+                    $( "#content" ).val("");
+                    dialog.dialog( "close" );
+                }
+
+                var dialog;
+                dialog =  $( "#question" ).dialog({
+                    autoOpen: false,
+                    show: {
+                        effect: "blind",
+                        duration: 1000
+                    },
+                    hide: {
+                        effect: "explode",
+                        duration: 1000
+                    },
+                    buttons: {
+                        "Submit": submitQuestion,
+                        Cancel: function() {
+                            $( "#content" ).val("");
+                            dialog.dialog( "close" );
+                        }
+                    }
+                });
+
+            $("#ask").on('click', function(){
+                $( "#question" ).dialog( "open" );
+            });
+        });
+
+        </script>
+    </head>
+    <body>
+        <img id="ask" src="/lib/img/question-big.png"></img>
+        <div id="question">
+            <p>Input your question!</p>
+            <textarea id="content"></textarea>
+        </div>
+    </body>
+</html>

@@ -1,11 +1,18 @@
-var fs = require('fs');
+var fs = require('fs')
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var pageNumber = 1;
+
+var questions = new Array();
+
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/question', function(req, res) {
+    res.sendFile(__dirname + '/question.html');
 });
 
 // images, js, css etc.  
@@ -29,6 +36,7 @@ app.get('/api/slides/first', function(req, res) {
         });
 
 });
+
 
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
@@ -61,6 +69,12 @@ io.on('connection', function(socket){
                 console.log(pageNumber);
             }
         });
+    });
+
+    socket.on('ask question', function(question) {
+        questions.push(question);
+        console.log(question);
+        io.emit('change question number', questions.length);
     });
 
 });
