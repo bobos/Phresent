@@ -11,6 +11,7 @@
       #next {background-image: url(/lib/img/next.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; float:right; margin-top: -444px;}
       #next:hover {background-position: 0 -44px;}
       #question {position: absolute; top: 1%; right:1%;}
+      #number {position: absolute; top: 1%; right: 1%; z-index:9999; font-size: 20px; border: 3px red solid; background-color: white;}
     </style>
     <script src="/lib/js/socket.io-1.2.0.js"></script>
     <script src="/lib/js/jquery-1.11.1.js"></script>
@@ -21,6 +22,7 @@
     <a id="next">next</a>
 
     <img id="question" src="/lib/img/question_answer.png" style="width: 5%;"></img>
+    <div id="number">0</div>
     <script>
     $(document).init(function(){
       if(!("WebSocket" in window))
@@ -33,6 +35,7 @@
     });
     
     var channel = io('/presenterChannel');
+    var Qchannel = io('/questionChannel');
     var askSlide = 'load slide';
 
     // Load first page
@@ -51,7 +54,16 @@
             if (content != "THE END") {
                 $('#present').html(content);
             }
-        });
+    });
+
+    Qchannel.on('change question number', function(number) {
+            if (number == 0) {
+                $("#number").html("0");
+            }
+            else {
+                $("#number").html(number.toString());
+            }
+    });
     </script>
   </body>
 </html>
