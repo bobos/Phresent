@@ -1,0 +1,38 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>Phresent: Audience Channel</title>
+
+        <link rel="stylesheet" href="/lib/audienceChannel/styles/vendor/normalize.css">
+        <link rel="stylesheet" href="/lib/audienceChannel/styles/audience.css">
+
+        <script src="/lib/audienceChannel/scripts/vendor/modernizr.js"></script>
+        <script src="/lib/audienceChannel/scripts/vendor/fastclick.js"></script>
+        <script src="/lib/audienceChannel/scripts/btns.js"></script>
+        <script src="/lib/audienceChannel/scripts/main.js"></script>
+        <script src="/lib/js/jquery-1.11.1.js"></script>
+    </head>
+    <body>
+        <noscript><p>Please turn on Javascript to use this page</p></noscript>
+        <script>
+          if (! ((Modernizr.cssanimations) && ('classList' in document.documentElement)) ) {
+              document.write( '<p>You are using an <strong>outdated</strong> browser. Please upgrade your browser to improve your experience.</p>' );
+          }
+
+          $(document).init(function(){
+            if(!("WebSocket" in window))
+            {
+              alert("OOPS your browser does NOT support websocket, Phresent won't " +
+                    "work on this browser, please upgrade your browser or try " + 
+                    "another browser.\r\n\r\n" +
+                    "Your browser information:" + navigator.userAgent)
+            }
+          });
+
+        </script>
+        <main id="main" class="main"></main>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Slides</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      #present {width: 800px; height: 600px; margin: 0 auto; margin-top: -200px}
+      #previous {background-image: url(/lib/img/previous.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; margin-top: 300px;}
+      #previous:hover {background-position: 0 -44px;}
+      #next {background-image: url(/lib/img/next.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; float:right; margin-top: -444px;}
+      #next:hover {background-position: 0 -44px;}
+    </style>
+    <script src="/lib/js/socket.io-1.2.0.js"></script>
+    <script src="/lib/js/jquery-1.11.1.js"></script>
+  </head>
+  <body>
+    <a id="previous">prev</a>
+    <div id="present">html</div>
+    <a id="next">next</a>
+
+    <script>
+      var channel = io('/audienceChannel');
+      var askSlide = 'load slide';
+      var pageNum = 0;
+      var incr = 0;
+      var loading = 0;
+      
+      function load_slide(increase) {
+        if (loading == 0) {
+          incr = increase;
+          loading = 1;
+          channel.emit(askSlide, (pageNum+incr).toString());
+        }
+      }
+
+      // load first slide
+      load_slide(1);
+
+      $("#previous").on("click", function() {
+        load_slide(-1);
+        return false;
+      });
+
+      $("#next").on("click", function() {
+        load_slide(1);
+        return false;
+      });
+
+      channel.on(askSlide, function(content) {
+        loading = 0;
+        if (content != "THE END") {
+            pageNum += incr;
+            $('#present').html(content);
+        }
+      });
+    </script>
+  </body>
+</html>

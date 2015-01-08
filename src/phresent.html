@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Presenter Channel</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      #present {width: 800px; height: 600px; margin: 0 auto; margin-top: -200px}
+      #previous {background-image: url(/lib/img/previous.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; margin-top: 300px;}
+      #previous:hover {background-position: 0 -44px;}
+      #next {background-image: url(/lib/img/next.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; float:right; margin-top: -444px;}
+      #next:hover {background-position: 0 -44px;}
+      #question {position: absolute; top: 1%; right:1%;}
+      #number {position: absolute; top: 1%; right: 1%; z-index:9999; font-size: 20px; border: 3px red solid; background-color: white;}
+    </style>
+    <script src="/lib/js/socket.io-1.2.0.js"></script>
+    <script src="/lib/js/jquery-1.11.1.js"></script>
+  </head>
+  <body>
+    <a id="previous">prev</a>
+    <div id="present">html</div>
+    <a id="next">next</a>
+
+    <img id="question" src="/lib/img/question_answer.png" style="width: 5%;"></img>
+    <div id="number">0</div>
+    <script>
+    $(document).init(function(){
+      if(!("WebSocket" in window))
+      {
+        alert("OOPS your browser does NOT support websocket, Phresent won't " +
+              "work on this browser, please upgrade your browser or try " + 
+              "another browser.\r\n\r\n" +
+              "Your browser information:" + navigator.userAgent)
+      }
+    });
+    
+    var channel = io('/presenterChannel');
+    var askSlide = 'load slide';
+
+    // Load first page
+    channel.emit(askSlide, '0');
+    $("#previous").on("click", function() {
+        channel.emit(askSlide, '-1');
+        return false;
+    });
+
+    $("#next").on("click", function() {
+        channel.emit(askSlide, '1');
+        return false;
+    });
+
+    channel.on(askSlide, function(content) {
+        if (content != "THE END") {
+            $('#present').html(content);
+        }
+    });
+
+    channel.on('change question number', function(number) {
+        if (number == 0) {
+            $("#number").html("0");
+        }
+        else {
+            $("#number").html(number.toString());
+        }
+    });
+    </script>
+  </body>
+</html>

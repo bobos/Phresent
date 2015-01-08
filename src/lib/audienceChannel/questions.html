@@ -10,11 +10,11 @@
         <script src="/lib/js/jquery-ui.js"></script>
         <script>
             $(function() {
-                var socket = io();
+                var channel = io('/presenterChannel');
 
                 function submitQuestion() {
                     var content = $( "#content" ).val();
-                    socket.emit('ask question', content);
+                    channel.emit('ask question', content);
                     $( "#content" ).val("");
                     dialog.dialog( "close" );
                 }
@@ -43,13 +43,12 @@
                 $( "#question" ).dialog( "open" );
             });
         });
-
         </script>
     </head>
     <body>
-        <img id="ask" src="/lib/img/question-big.png"></img>
+        <img id="ask" src="/lib/img/question_answer.png"></img>
         <div id="question">
-            <p>Input your question!</p>
+            <p>Enter your question!</p>
             <textarea id="content"></textarea>
         </div>
     </body>
