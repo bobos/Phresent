@@ -35,19 +35,11 @@
         if ( document.documentElement.classList.contains('touch-fix') ) FastClick.attach(document.body);
 
         // creates the menu
-        new Btn( 'Touch Me' ).addClass('skin-main_menu')
-            .append( new Btn('Presenter').addClass('skin-presenter').on( 'click', linkEvent('/lib/audienceChannel/presenter.html') ) )
-
-            .append( new Btn('Slides').addClass('skin-slides').on( 'click', linkEvent('/lib/audienceChannel/slides.html') ) )
-
-            .append( new Btn('Agenda').addClass('skin-agenda').on( 'click', linkEvent('/lib/audienceChannel/agenda.html') ) )
-
-            .append( new Btn('Codex').addClass('skin-codex').on( 'click', linkEvent('/lib/audienceChannel/codex.html') ) )
-
-            .append( new Btn('Questions').addClass('skin-question').on( 'click', linkEvent('/lib/audienceChannel/questions.html') ) )
-
-            // Appending the button menu to the DOM - `#main` element
-            .appendTo( '#main' );
+        new Btn('Presenter').addClass('skin-presenter').on( 'click', linkEvent('/lib/audienceChannel/presenter.html') ).appendTo('#main');
+        new Btn('Slides').addClass('skin-slides').on( 'click', linkEvent('/lib/audienceChannel/slides.html') ).appendTo('#main');
+        new Btn('Agenda').addClass('skin-agenda').on( 'click', linkEvent('/lib/audienceChannel/agenda.html') ).appendTo('#main');
+        new Btn('Codex').addClass('skin-codex').on( 'click', linkEvent('/lib/audienceChannel/codex.html') ).appendTo('#main');
+        new Btn('Questions').addClass('skin-question').on( 'click', linkEvent('/lib/audienceChannel/questions.html') ).appendTo('#main');
 
         // remove the class that makes the menu invisible
         if ('requestAnimationFrame' in window) {

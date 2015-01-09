@@ -77,7 +77,6 @@ body {
 
 .button {
   left: 50%;
-  top: 50%;
   position: absolute;
   background-color: transparent;
   color: #fff;
@@ -89,7 +88,26 @@ body {
 }
 
 .button.is-has-no-parent {
-  top: 50px;
+}
+
+.skin-presenter {
+    top: 60px;
+}
+
+.skin-slides {
+    top: 120px;
+}
+
+.skin-agenda {
+    top: 180px;
+}
+
+.skin-codex {
+    top: 240px;
+}
+
+.skin-question {
+    top: 300px;
 }
 
 @media screen and (min-width: 480px) and (min-height: 480px) {
