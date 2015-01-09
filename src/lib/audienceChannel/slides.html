@@ -30,7 +30,7 @@
         if (loading == 0) {
           incr = increase;
           loading = 1;
-          channel.emit(askSlide, (pageNum+incr).toString());
+          channel.emit(askSlide, pageNum+incr);
         }
       }
 

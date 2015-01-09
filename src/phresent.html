@@ -38,14 +38,14 @@
     var askSlide = 'load slide';
 
     // Load first page
-    channel.emit(askSlide, '0');
+    channel.emit(askSlide, 0);
     $("#previous").on("click", function() {
-        channel.emit(askSlide, '-1');
+        channel.emit(askSlide, -1);
         return false;
     });
 
     $("#next").on("click", function() {
-        channel.emit(askSlide, '1');
+        channel.emit(askSlide, 1);
         return false;
     });
 
