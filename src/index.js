@@ -37,7 +37,7 @@ var presenterChannel = io.of('/presenterChannel');
 presenterChannel.on('connection', function(socket){
   // load slide request from presenter
   socket.on(askSlide, function(incr) {
-    load_slide(pageNumber + incr, true, socket);
+    load_slide(pageNumber + incr, true, presenterChannel);
     });
 
   socket.on('ask question', function(question) {

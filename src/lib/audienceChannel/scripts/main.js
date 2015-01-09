@@ -33,13 +33,35 @@
     function onload() {
         // fast click for iOS / Android
         if ( document.documentElement.classList.contains('touch-fix') ) FastClick.attach(document.body);
+        var width = $(window).width();
+        var height = $(window).height();
+        var btns = {
+                     'Presenter':     ['skin-presenter', '/lib/audienceChannel/presenter.html'], 
+                     'Slides':        ['skin-slides', '/lib/audienceChannel/slides.html'], 
+                     'Agenda':        ['skin-agenda', '/lib/audienceChannel/agenda.html'], 
+                     'Codex':         ['skin-codex', '/lib/audienceChannel/codex.html'], 
+                     'Questions':     ['skin-question', '/lib/audienceChannel/questions.html']
+                   };
+        var btnNum = Object.keys(btns).length;
+        var btnHeight = height/(btnNum+1);
+        var space = btnHeight/(btnNum+1);
 
+        var i = 0;
+        var space1 = btnHeight+space;
+        var space2 = space*2;
         // creates the menu
-        new Btn('Presenter').addClass('skin-presenter').on( 'click', linkEvent('/lib/audienceChannel/presenter.html') ).appendTo('#main');
-        new Btn('Slides').addClass('skin-slides').on( 'click', linkEvent('/lib/audienceChannel/slides.html') ).appendTo('#main');
-        new Btn('Agenda').addClass('skin-agenda').on( 'click', linkEvent('/lib/audienceChannel/agenda.html') ).appendTo('#main');
-        new Btn('Codex').addClass('skin-codex').on( 'click', linkEvent('/lib/audienceChannel/codex.html') ).appendTo('#main');
-        new Btn('Questions').addClass('skin-question').on( 'click', linkEvent('/lib/audienceChannel/questions.html') ).appendTo('#main');
+        for(var k in btns) {
+            var classname = btns[k][0];
+            var link = btns[k][1];
+            // add button
+            new Btn(k).addClass(classname).on( 'click', linkEvent(link)).appendTo('#main');
+            // adjust button size
+            var classname1 = "."+classname;
+            $(classname1).height(btnHeight);
+            $(classname1).width(width*0.8);
+            $(classname1).css("top", space1*i+space2);
+            i++;
+        }
 
         // remove the class that makes the menu invisible
         if ('requestAnimationFrame' in window) {
