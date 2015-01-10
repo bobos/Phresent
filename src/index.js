@@ -39,6 +39,12 @@ presenterChannel.on('connection', function(socket){
   socket.on(askSlide, function(incr) {
     load_slide(pageNumber + incr, true, presenterChannel);
     });
+ 
+  socket.on('load presentation page', function() {
+    load_slide(pageNumber, true, presenterChannel);
+    presenterChannel.emit('change question number', 
+                          questions.length);
+    });
 
   socket.on('ask question', function(question) {
     questions.push(question);
