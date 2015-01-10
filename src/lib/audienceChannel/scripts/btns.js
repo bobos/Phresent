@@ -40,7 +40,6 @@
 
 
     var BUTTON_CLASS           = 'button',
-        BUTTON_CONTAINER_CLASS = 'button-container',
         BUTTON_BUTTON_CLASS    = 'button-button',
         BUTTON_TITLE_CLASS     = 'button-title',
 
@@ -75,9 +74,6 @@
         children: [ {
             name: ELELMENTS["button container"],
             tag: "div",
-            attr: {
-                "class": BUTTON_CONTAINER_CLASS,
-            },
 
             children: [{
                 name: ELELMENTS.button,
