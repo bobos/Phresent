@@ -38,7 +38,7 @@
     var askSlide = 'load slide';
 
     // Load first page
-    channel.emit(askSlide, 0);
+    channel.emit('load presentation page');
     $("#previous").on("click", function() {
         channel.emit(askSlide, -1);
         return false;
@@ -56,12 +56,7 @@
     });
 
     channel.on('change question number', function(number) {
-        if (number == 0) {
-            $("#number").html("0");
-        }
-        else {
             $("#number").html(number.toString());
-        }
     });
     </script>
   </body>
