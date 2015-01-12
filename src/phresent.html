@@ -14,10 +14,13 @@
       #question {position: absolute; top: 1%; right:1%;}
       #number {position: absolute; top: 1%; right: 1%; z-index:9999; font-size: 20px; border: 3px red solid; background-color: white;}
       #vote {position: absolute; bottom: 1%; right: 1%; }
+      #placeholder {width: 600px; height: 480px; min-height: 480px; font-size: 14px; line-height: 1.2em;}
     </style>
     <script src="/lib/js/socket.io-1.2.0.js"></script>
     <script src="/lib/js/jquery-1.11.1.js"></script>
     <script src="/lib/js/jquery-ui.js"></script>
+    <script src="/lib/js/jquery.flot.js"></script>
+    <script src="/lib/js/jquery.flot.categories.js"></script>
   </head>
   <body>
     <a id="previous">prev</a>
@@ -29,6 +32,9 @@
     <div id="number">0</div>
     <div id="candidates">
       <textarea id="content"></textarea>
+    </div>
+    <div id="vote-result">
+      <div id="placeholder"></div>
     </div>
     <script>
     $(document).init(function(){
@@ -46,11 +52,16 @@
 
     var dialog;
 
+    
+
     function submitCandidates() {
       var content = $("#content").val();
       channel.emit('create votes', content);
       $("#content").val("");
       dialog.dialog("close");
+      //Have a dialog to show the vote result
+      $("#vote-result").dialog({width:800, height:600});
+
     }
 
     dialog = $("#candidates").dialog({
@@ -60,9 +71,33 @@
         Cancel: function() {
           $("#content").val("");
           dialog.dialog("close");
+
+
         }
       }
     });
+          channel.on('show votes', function(votes){
+            var dataForShown = new Array();
+            for (var key in votes) {
+              dataForShown.push([key, votes[key]]);
+            }
+
+            console.log(dataForShown);
+            $.plot("#placeholder", [dataForShown], {
+              series: {
+                bars: {
+                  show: true,
+                  barWidth: 0.6,
+                  align: "center",
+                },
+              },
+              xaxis: {
+                mode: "categories",
+                tickLength: 0,
+              }
+            });
+
+          });
 
     $("#vote").on("click", function() {
       $("#candidates").dialog("open");
