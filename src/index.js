@@ -7,6 +7,7 @@ var pageNumber = 1;
 
 var questions = new Array();
 var votes = {'Apple': 0, 'Banana': 0, 'Orange': 0, 'Pear': 0};
+var votedAddress = new Array();
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/phresent.html');
@@ -71,9 +72,11 @@ audienceChannel.on('connection', function(socket){
 
   socket.on('vote', function(vote) {
   var address = socket.handshake.address;
-    votes[vote] += 1;
+    if (votedAddress.indexOf(address) == -1) {
+      votes[vote] += 1;
+      votedAddress.push(address);
+    }
     console.log(votes);
-    console.log(address);
   });
 
 });
