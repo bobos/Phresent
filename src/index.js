@@ -6,6 +6,7 @@ var io = require('socket.io')(http);
 var pageNumber = 1;
 
 var questions = new Array();
+var votes = {'Apple': 0, 'Banana': 0, 'Orange': 0, 'Pear': 0};
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/phresent.html');
@@ -63,6 +64,18 @@ audienceChannel.on('connection', function(socket){
   socket.on(askSlide, function(num) {
     load_slide(num, false, socket)
     });
+
+  socket.on('ask votes', function() {
+    socket.emit('ask votes', votes);
+  });
+
+  socket.on('vote', function(vote) {
+  var address = socket.handshake.address;
+    votes[vote] += 1;
+    console.log(votes);
+    console.log(address);
+  });
+
 });
 
 http.listen(3000, function(){
