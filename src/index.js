@@ -64,8 +64,11 @@ presenterChannel.on('connection', function(socket){
     candidates.split('\n').forEach(function(option){
       votes[option] = 0;
     });
+    presenterChannel.emit('show votes', votes);
     console.log(votes);
   });
+
+  
 });
 
 /*
@@ -89,11 +92,11 @@ audienceChannel.on('connection', function(socket){
       votedAddress.push(address);
     }
     console.log(votes);
-    audienceChannel.emit('show votes', votes);
+    presenterChannel.emit('show votes', votes);
   });
 
   socket.on('show votes', function() {
-    audienceChannel.emit('show votes', votes);
+    presenterChannel.emit('show votes', votes);
   });
 
 });
