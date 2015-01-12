@@ -6,10 +6,15 @@ var io = require('socket.io')(http);
 var pageNumber = 1;
 
 var questions = new Array();
-var votes = {'Apple': 0, 'Banana': 0, 'Orange': 0, 'Pear': 0};
+var votes;
+var votedAddress = new Array();
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/phresent.html');
+});
+
+app.get('/vote', function(req, res){
+  res.sendFile(__dirname + '/vote.html');
 });
 
 app.get('/audienceChannel', function(req, res){
@@ -53,6 +58,14 @@ presenterChannel.on('connection', function(socket){
     presenterChannel.emit('change question number', 
                           questions.length);
     });
+
+  socket.on('create votes', function(candidates) {
+    votes = {};
+    candidates.split('\n').forEach(function(option){
+      votes[option] = 0;
+    });
+    console.log(votes);
+  });
 });
 
 /*
@@ -71,9 +84,16 @@ audienceChannel.on('connection', function(socket){
 
   socket.on('vote', function(vote) {
   var address = socket.handshake.address;
-    votes[vote] += 1;
+    if (votedAddress.indexOf(address) == -1) {
+      votes[vote] += 1;
+      votedAddress.push(address);
+    }
     console.log(votes);
-    console.log(address);
+    audienceChannel.emit('show votes', votes);
+  });
+
+  socket.on('show votes', function() {
+    audienceChannel.emit('show votes', votes);
   });
 
 });
