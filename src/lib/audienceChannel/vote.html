@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <script src="/lib/js/socket.io-1.2.0.js"></script>
+        <script src="/lib/js/jquery-1.11.1.js"></script>
+
+        <script>
+        $(document).init(function() {
+            var channel = io('/audienceChannel');
+
+            function presentVoteOptions(votes){
+                for (var option in votes) {
+                    console.log(option);
+                    $("#vote").append("<input type='radio' name='vote' value='" + option + "'>" + option + "</input>");
+                    $("#vote").append("<br />");
+                }
+            }
+
+            $("#submit").on('click', function() {
+                var selection = $('input[name=vote]:checked').val();
+                channel.emit('vote', selection);
+            });
+
+            channel.emit('ask votes', 'hello');
+            channel.on('ask votes', function(votes) {
+                console.log(votes);
+                presentVoteOptions(votes);
+            });
+            
+        });
+        </script>
+    </head>
+
+    <body>
+        <h1>Vote</h1>
+        <div id="vote"></div>
+        <button id="submit">Submit</button>
+    </body>
+</html>
