@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Presenter Channel</title>
+    <link rel="stylesheet" href="/lib/css/jquery-ui.css">
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
@@ -12,9 +13,11 @@
       #next:hover {background-position: 0 -44px;}
       #question {position: absolute; top: 1%; right:1%;}
       #number {position: absolute; top: 1%; right: 1%; z-index:9999; font-size: 20px; border: 3px red solid; background-color: white;}
+      #vote {position: absolute; bottom: 1%; right: 1%; }
     </style>
     <script src="/lib/js/socket.io-1.2.0.js"></script>
     <script src="/lib/js/jquery-1.11.1.js"></script>
+    <script src="/lib/js/jquery-ui.js"></script>
   </head>
   <body>
     <a id="previous">prev</a>
@@ -22,7 +25,11 @@
     <a id="next">next</a>
 
     <img id="question" src="/lib/img/question_answer.png" style="width: 5%;"></img>
+    <img id="vote" src="/lib/img/vote.png"></img>
     <div id="number">0</div>
+    <div id="candidates">
+      <textarea id="content"></textarea>
+    </div>
     <script>
     $(document).init(function(){
       if(!("WebSocket" in window))
@@ -36,6 +43,30 @@
     
     var channel = io('/presenterChannel');
     var askSlide = 'load slide';
+
+    var dialog;
+
+    function submitCandidates() {
+      var content = $("#content").val();
+      channel.emit('create votes', content);
+      $("#content").val("");
+      dialog.dialog("close");
+    }
+
+    dialog = $("#candidates").dialog({
+      autoOpen: false,
+      buttons: {
+        "Submit": submitCandidates,
+        Cancel: function() {
+          $("#content").val("");
+          dialog.dialog("close");
+        }
+      }
+    });
+
+    $("#vote").on("click", function() {
+      $("#candidates").dialog("open");
+    });
 
     // Load first page
     channel.emit('load presentation page');

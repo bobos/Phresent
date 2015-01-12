@@ -6,7 +6,7 @@ var io = require('socket.io')(http);
 var pageNumber = 1;
 
 var questions = new Array();
-var votes = {'Apple': 0, 'Banana': 0, 'Orange': 0, 'Pear': 0};
+var votes;
 var votedAddress = new Array();
 
 app.get('/', function(req, res){
@@ -54,6 +54,14 @@ presenterChannel.on('connection', function(socket){
     presenterChannel.emit('change question number', 
                           questions.length);
     });
+
+  socket.on('create votes', function(candidates) {
+    votes = {};
+    candidates.split('\n').forEach(function(option){
+      votes[option] = 0;
+    });
+    console.log(votes);
+  });
 });
 
 /*
