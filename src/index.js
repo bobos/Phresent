@@ -13,6 +13,10 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/phresent.html');
 });
 
+app.get('/vote', function(req, res){
+  res.sendFile(__dirname + '/vote.html');
+});
+
 app.get('/audienceChannel', function(req, res){
   res.sendFile(__dirname + '/audience.html');
 });
@@ -85,6 +89,11 @@ audienceChannel.on('connection', function(socket){
       votedAddress.push(address);
     }
     console.log(votes);
+    audienceChannel.emit('show votes', votes);
+  });
+
+  socket.on('show votes', function() {
+    audienceChannel.emit('show votes', votes);
   });
 
 });
