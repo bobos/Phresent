@@ -8,6 +8,7 @@ var pageNumber = 1;
 var questions = new Array();
 var votes;
 var votedAddress = new Array();
+var questionCounter = 0;
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/phresent.html');
@@ -66,6 +67,24 @@ presenterChannel.on('connection', function(socket){
     });
     presenterChannel.emit('show votes', votes);
     console.log(votes);
+  });
+
+  socket.on('load questions', function(type) {
+    if (type == 'LOAD') {
+      console.log('send out question!');
+    }
+    else if (type == 'NEXT') {
+      if (questionCounter < questions.length -1 ) {
+        questionCounter += 1;
+      }
+    }
+    else if (type == 'PREVIOUS') {
+      if (questionCounter > 0 ) {
+        questionCounter -= 1;
+      }
+    }
+    console.log(questionCounter);
+    presenterChannel.emit('show questions', questions[questionCounter]);
   });
 
   

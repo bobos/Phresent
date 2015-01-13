@@ -15,6 +15,12 @@
       #number {position: absolute; top: 1%; right: 1%; z-index:9999; font-size: 20px; border: 3px red solid; background-color: white;}
       #vote {position: absolute; bottom: 1%; right: 1%; }
       #placeholder {width: 600px; height: 480px; min-height: 480px; font-size: 14px; line-height: 1.2em;}
+      #previous-question {background-image: url(/lib/img/previous.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; margin-top: 300px;float:left;}
+      #previous-question:hover {background-position: 0 -44px;}
+      #next-question {background-image: url(/lib/img/next.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; float:right; margin-top: 300px;}
+      #next-question:hover {background-position: 0 -44px;}
+      #present-question {min-height:480px; min-width:600px;float:left;}
+
     </style>
     <script src="/lib/js/socket.io-1.2.0.js"></script>
     <script src="/lib/js/jquery-1.11.1.js"></script>
@@ -35,6 +41,11 @@
     </div>
     <div id="vote-result">
       <div id="placeholder"></div>
+    </div>
+    <div id="questions">
+      <a id="previous-question"></a>
+      <div id="present-question"></div>
+      <a id="next-question"></a>
     </div>
     <script>
     $(document).init(function(){
@@ -76,31 +87,41 @@
         }
       }
     });
-          channel.on('show votes', function(votes){
-            var dataForShown = new Array();
-            for (var key in votes) {
-              dataForShown.push([key, votes[key]]);
-            }
+    
+    channel.on('show votes', function(votes){
+      var dataForShown = new Array();
+      for (var key in votes) {
+        dataForShown.push([key, votes[key]]);
+      }
 
-            console.log(dataForShown);
-            $.plot("#placeholder", [dataForShown], {
-              series: {
-                bars: {
-                  show: true,
-                  barWidth: 0.6,
-                  align: "center",
-                },
-              },
-              xaxis: {
-                mode: "categories",
-                tickLength: 0,
-              }
-            });
+      console.log(dataForShown);
+      $.plot("#placeholder", [dataForShown], {
+        series: {
+          bars: {
+            show: true,
+            barWidth: 0.6,
+            align: "center",
+          },
+        },
+        xaxis: {
+          mode: "categories",
+          tickLength: 0,
+        }
+      });
 
-          });
+    });
 
     $("#vote").on("click", function() {
       $("#candidates").dialog("open");
+    });
+
+    // Load questions
+
+
+    $("#question").on("click", function() {
+      console.log('questions!');
+      $("#questions").dialog({width:800, height:600});
+      channel.emit('load questions', 'LOAD');
     });
 
     // Load first page
@@ -115,6 +136,7 @@
         return false;
     });
 
+
     channel.on(askSlide, function(content) {
         if (content != "THE END") {
             $('#present').html(content);
@@ -123,6 +145,18 @@
 
     channel.on('change question number', function(number) {
             $("#number").html(number.toString());
+    });
+
+    $("#previous-question").on('click', function () {
+      channel.emit('load questions', 'PREVIOUS');
+    });
+
+    $("#next-question").on('click', function () {
+      channel.emit('load questions', 'NEXT');
+    });
+
+    channel.on('show questions', function(question) {
+      $("#present-question").html("<h1>" + question + "</h1>");
     });
     </script>
   </body>
