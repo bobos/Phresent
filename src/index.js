@@ -136,6 +136,11 @@ audienceChannel.on('connection', function(socket){
     presenterChannel.emit('show votes', votes);
   });
 
+  socket.on('submit comment', function(comment) {
+    console.log('Get comment');
+    presenterChannel.emit('show comments', comment);
+  });
+
 });
 
 http.listen(3000, function(){

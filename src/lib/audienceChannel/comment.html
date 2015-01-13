@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <script src="/lib/js/socket.io-1.2.0.js"></script>
+        <script src="/lib/js/jquery-1.11.1.js"></script>
+
+        <script>
+        $(document).init(function() {
+            var channel = io('/audienceChannel');
+
+            $("#submit").on('click', function() {
+              var comment = $("#comment").val();
+              channel.emit('submit comment', comment);
+              $("#comment").val("");
+            });
+            
+        });
+        </script>
+    </head>
+
+    <body>
+        <h1>Comment</h1>
+        <textarea id="comment"></textarea>
+        <button id="submit">Submit</button>
+    </body>
+</html>
