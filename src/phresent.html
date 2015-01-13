@@ -46,7 +46,9 @@
       <a id="previous-question"></a>
       <div id="present-question"></div>
       <a id="next-question"></a>
-    </div>
+      <button id="close-question">Close</button>
+    
+</div>
     <script>
     $(document).init(function(){
       if(!("WebSocket" in window))
@@ -136,7 +138,6 @@
         return false;
     });
 
-
     channel.on(askSlide, function(content) {
         if (content != "THE END") {
             $('#present').html(content);
@@ -155,8 +156,20 @@
       channel.emit('load questions', 'NEXT');
     });
 
+    $("#close-question").on("click", function() {
+      console.log('Send out!');
+      channel.emit('load questions', 'REMOVE');
+    });
+
+
+
     channel.on('show questions', function(question) {
-      $("#present-question").html("<h1>" + question + "</h1>");
+      if (question == 'QUESTION END') {
+        $("#questions").dialog("close");
+      }
+      else {
+        $("#present-question").html("<h1>" + question + "</h1>");
+      }
     });
     </script>
   </body>
