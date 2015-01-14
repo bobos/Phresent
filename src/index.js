@@ -9,9 +9,24 @@ var questions = new Array();
 var votes;
 var votedAddress = new Array();
 var questionCounter = 0;
+var connected = new Array();
+var timer = 0;
+
+var presenterChannel = io.of('/presenterChannel');
+
+function setTimer(){
+  setTimeout(function(){
+    timer += 1;
+    presenterChannel.emit('update elapsed time', timer)
+    setTimer();
+  }, 1000);
+}
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/phresent.html');
+  if (timer == 0) {
+    setTimer();
+  }
 });
 
 app.get('/vote', function(req, res){
@@ -40,7 +55,6 @@ function load_slide(pageNum, isPresenter, socket) {
 /*
  * presenter channel
  */
-var presenterChannel = io.of('/presenterChannel');
 presenterChannel.on('connection', function(socket){
   // load slide request from presenter
   socket.on(askSlide, function(incr) {
@@ -67,6 +81,21 @@ presenterChannel.on('connection', function(socket){
     });
     presenterChannel.emit('show votes', votes);
     console.log(votes);
+  });
+
+  socket.on('total time', function(){
+    fs.readFile('agenda/time', 'utf-8', function(err, data) {
+      var msg = data;
+      if (err) { msg = 'THE END'; }
+      if (!err) { msg = data; }
+      var time = data.split(":");
+      console.log(data);
+      console.log(time);
+      var sec = parseInt(time[0]) * 3600 + parseInt(time[1]) * 60 + parseInt(time[2]);
+      console.log(sec);
+      socket.emit('update total time', sec);
+    });
+
   });
 
   socket.on('load questions', function(type) {
@@ -139,6 +168,14 @@ audienceChannel.on('connection', function(socket){
   socket.on('submit comment', function(comment) {
     console.log('Get comment');
     presenterChannel.emit('show comments', comment);
+  });
+
+  socket.on('connected', function() {
+    var address = socket.handshake.address
+    if (connected.indexOf(address) == -1) {
+      connected.push(address);
+    }
+    presenterChannel.emit('update connected number', connected.length);
   });
 
 });
