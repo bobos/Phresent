@@ -6,11 +6,9 @@
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
-      #present {width: 800px; height: 600px; margin: 0 auto; margin-top: -200px}
-      #previous {background-image: url(/lib/img/previous.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; margin-top: 300px;}
-      #previous:hover {background-position: 0 -44px;}
-      #next {background-image: url(/lib/img/next.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; float:right; margin-top: -444px;}
-      #next:hover {background-position: 0 -44px;}
+      #present {width: 800px; height: 600px; margin: 0 auto; margin-top: 100px}
+      #previous {float: left; min-width: 200px; min-height: 400px; margin-top: 100px;}
+      #next {float: right; min-width: 200px; min-height: 400px; margin-top: -600px;}
       #question {position: absolute; top: 1%; right:1%;}
       #number {position: absolute; top: 1%; right: 1%; z-index:9999; font-size: 20px; border: 3px red solid; background-color: white;}
       #vote {position: absolute; bottom: 1%; right: 1%; }
@@ -41,9 +39,9 @@
       <div id="elapsed-time">Elapsed: </div>
       <div id="left-time">Left: </div>
     </div>
-    <a id="previous">prev</a>
+    <div id="previous"></div>
     <div id="present">html</div>
-    <a id="next">next</a>
+    <div id="next"></div>
 
     <img id="question" src="/lib/img/question_answer.png" style="width: 5%;"></img>
     <img id="vote" src="/lib/img/vote.png"></img>
@@ -153,6 +151,7 @@
     });
 
     $("#next").on("click", function() {
+        console.log('next!');
         channel.emit(askSlide, 1);
         return false;
     });
@@ -268,9 +267,7 @@
 
     channel.on('update elapsed time', function(number){
       var elapsedTime = formatTime(number);
-      console.log(totalTime - number);
       var leftTime = formatTime(totalTime - number);
-      console.log(leftTime);
       $("#elapsed-time").html("Elapsed: " + elapsedTime);
       $("#left-time").html("Left: " + leftTime)
     });
