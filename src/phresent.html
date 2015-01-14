@@ -20,6 +20,9 @@
       #next-question {background-image: url(/lib/img/next.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; float:right; margin-top: 300px;}
       #next-question:hover {background-position: 0 -44px;}
       #present-question {min-height:480px; min-width:600px;float:left;}
+      #comment-bar {position:absolute; min-height:150px; min-width:100%; bottom:0;background-color: black; color:white;}
+      #comment1 {width:100%; height:100%;}
+      #comment2 {width:100%; height:100%;}
 
     </style>
     <script src="/lib/js/socket.io-1.2.0.js"></script>
@@ -46,6 +49,12 @@
       <a id="previous-question"></a>
       <div id="present-question"></div>
       <a id="next-question"></a>
+      <button id="close-question">Close</button>
+    
+    </div>
+    <div id="comment-bar">
+    <div id="comment0"></div>
+    <div id="comment1"></div>
     </div>
     <script>
     $(document).init(function(){
@@ -62,6 +71,7 @@
     var askSlide = 'load slide';
 
     var dialog;
+    var locks = [false, false];
 
     
 
@@ -136,7 +146,6 @@
         return false;
     });
 
-
     channel.on(askSlide, function(content) {
         if (content != "THE END") {
             $('#present').html(content);
@@ -155,8 +164,67 @@
       channel.emit('load questions', 'NEXT');
     });
 
+    $("#close-question").on("click", function() {
+      console.log('Send out!');
+      channel.emit('load questions', 'REMOVE');
+    });
+
+
+
     channel.on('show questions', function(question) {
-      $("#present-question").html("<h1>" + question + "</h1>");
+      if (question == 'QUESTION END') {
+        $("#questions").dialog("close");
+      }
+      else {
+        $("#present-question").html("<h1>" + question + "</h1>");
+      }
+    });
+
+    function unlock(number) {
+      locks[number] = false;
+      console.log("Unlock!");
+    }
+
+    function chooseCommentBar(){
+      var result = locks.indexOf(false);
+      if (result != -1) {
+        locks[result] = true;
+      }
+      return result;
+    }
+    $("marquee").on("finish", function(){
+      console.log("FInished!");
+    });
+
+    function showComment(comment){
+      var choice = chooseCommentBar();
+      if (choice == 0) {
+        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee bgcolor='#0000040' width='100%' loop='1'><strong>" + comment + "<strong></marquee></font>");
+        setTimeout(function() {locks[choice]=false; console.log("reset" + choice.toString())}, 25000);
+        console.log("1st comment");
+        return choice;
+      }
+      else if (choice == 1) {
+        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee bgcolor='#0000040' width='100%' loop='1'><strong>" + comment + "<strong></marquee></font>");
+        setTimeout(function() {locks[choice]=false; console.log("reset" + choice.toString())}, 25000);
+        console.log("2nd comment");
+        return choice;
+      }
+      else {
+        setTimeout(function() {showComment(comment);}, 5000);
+        return -1;
+      }
+
+    }
+    channel.on('show comments', function(comment) {
+      var result = showComment(comment);
+      if (result == -1) {
+          console.log('Wait!');
+        //  setTimeout(function() { showComment(comment); }, 5000); 
+      }
+  //    else {
+//        setTimeout(function() {locks[result]=false; console.log("reset" + result.toString())}, 25000);
+    //  }
     });
     </script>
   </body>

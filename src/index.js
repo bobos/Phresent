@@ -83,8 +83,26 @@ presenterChannel.on('connection', function(socket){
         questionCounter -= 1;
       }
     }
+    else if (type == 'REMOVE') {
+      if (questionCounter == questions.length - 1) {
+        questions.pop();
+        questionCounter -= 1;
+      }
+      else {
+        questions.splice(questionCounter, 1);
+        console.log("splice the questions");
+      }
+      presenterChannel.emit('change question number', 
+                          questions.length)
+    }
     console.log(questionCounter);
-    presenterChannel.emit('show questions', questions[questionCounter]);
+    console.log(questions);
+    if (questions.length == 0) {
+      presenterChannel.emit('show questions', "QUESTION END");
+    }
+    else {
+      presenterChannel.emit('show questions', questions[questionCounter]);
+    }
   });
 
   
@@ -116,6 +134,11 @@ audienceChannel.on('connection', function(socket){
 
   socket.on('show votes', function() {
     presenterChannel.emit('show votes', votes);
+  });
+
+  socket.on('submit comment', function(comment) {
+    console.log('Get comment');
+    presenterChannel.emit('show comments', comment);
   });
 
 });

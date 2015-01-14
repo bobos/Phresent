@@ -41,7 +41,8 @@
                      'Agenda':        ['skin-agenda', '/lib/audienceChannel/agenda.html'], 
                      'Codex':         ['skin-codex', '/lib/audienceChannel/codex.html'], 
                      'Questions':     ['skin-question', '/lib/audienceChannel/questions.html'],
-                     'Vote':          ['skin-vote', '/lib/audienceChannel/vote.html']
+                     'Vote':          ['skin-vote', '/lib/audienceChannel/vote.html'],
+                     'Comment':       ['skin-comment', '/lib/audienceChannel/comment.html'],
                    };
         var btnNum = Object.keys(btns).length;
         var btnHeight = height/(btnNum+1);
