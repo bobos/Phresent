@@ -13,6 +13,7 @@
         <script src="/lib/audienceChannel/scripts/vendor/fastclick.js"></script>
         <script src="/lib/audienceChannel/scripts/btns.js"></script>
         <script src="/lib/audienceChannel/scripts/main.js"></script>
+        <script src="/lib/js/socket.io-1.2.0.js"></script>
         <script src="/lib/js/jquery-1.11.1.js"></script>
     </head>
     <body>
@@ -30,6 +31,10 @@
                     "another browser.\r\n\r\n" +
                     "Your browser information:" + navigator.userAgent)
             }
+
+            var channel = io('/audienceChannel');
+
+            channel.emit('connected');
           });
 
         </script>
