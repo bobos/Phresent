@@ -22,7 +22,7 @@ function setTimer(){
   }, 1000);
 }
 
-app.get('/', function(req, res){
+app.get('/ffee1cca7862e99487a93dbc70634af0af288d5f', function(req, res){
   res.sendFile(__dirname + '/phresent.html');
   if (timer == 0) {
     setTimer();
