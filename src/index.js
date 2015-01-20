@@ -11,8 +11,10 @@ var votedAddress = new Array();
 var questionCounter = 0;
 var connected = new Array();
 var timer = 0;
+var agenda = {};
 
 var presenterChannel = io.of('/presenterChannel');
+var audienceChannel = io.of('/audienceChannel');
 
 function setTimer(){
   setTimeout(function(){
@@ -49,6 +51,7 @@ function load_slide(pageNum, isPresenter, socket) {
       if (err) { msg = 'THE END'; }
       if (!err && isPresenter) { pageNumber = pageNum; }
       socket.emit(askSlide, msg);
+      audienceChannel.emit('update agenda', pageNum);
   });
 }
 
@@ -63,8 +66,8 @@ presenterChannel.on('connection', function(socket){
  
   socket.on('load presentation page', function() {
     load_slide(pageNumber, true, presenterChannel);
-    presenterChannel.emit('change question number', 
-                          questions.length);
+//    presenterChannel.emit('change question number', 
+//                          questions.length);
     });
 
   socket.on('ask question', function(question) {
@@ -84,11 +87,11 @@ presenterChannel.on('connection', function(socket){
   });
 
   socket.on('total time', function(){
-    fs.readFile('agenda/time', 'utf-8', function(err, data) {
+    fs.readFile('agenda/agenda', 'utf-8', function(err, data) {
       var msg = data;
       if (err) { msg = 'THE END'; }
-      if (!err) { msg = data; }
-      var time = data.split(":");
+      if (!err) { msg = JSON.parse(data); }
+      var time = msg['duration'].split(":");
       console.log(data);
       console.log(time);
       var sec = parseInt(time[0]) * 3600 + parseInt(time[1]) * 60 + parseInt(time[2]);
@@ -97,6 +100,7 @@ presenterChannel.on('connection', function(socket){
     });
 
   });
+
 
   socket.on('load questions', function(type) {
     if (type == 'LOAD') {
@@ -140,7 +144,6 @@ presenterChannel.on('connection', function(socket){
 /*
  * audience channel
  */
-var audienceChannel = io.of('/audienceChannel');
 audienceChannel.on('connection', function(socket){
 // load slide request from audience
   socket.on(askSlide, function(num) {
@@ -178,6 +181,31 @@ audienceChannel.on('connection', function(socket){
     presenterChannel.emit('update connected number', connected.length);
   });
 
+  function isEmptyObject( obj ) {
+    for ( var name in obj ) {
+        return false;
+    }
+    return true;
+  }
+
+  socket.on('load agenda', function() {
+      fs.readFile('agenda/agenda', 'utf-8', function(err, data) {
+        var msg = data;
+        if (err) { msg = 'OPPPPS'; }
+        if (!err) { msg = JSON.parse(data); }
+        console.log(msg);
+        agenda = msg;
+        console.log(agenda);
+        response = JSON.stringify(agenda)
+        socket.emit('load agenda', response);
+
+    });
+
+  });
+
+  socket.on('update agenda', function() {
+    socket.emit('update agenda', pageNumber);
+  });
 });
 
 http.listen(3000, function(){
