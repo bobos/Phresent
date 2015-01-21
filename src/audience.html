@@ -15,6 +15,7 @@
         <script src="/lib/audienceChannel/scripts/main.js"></script>
         <script src="/lib/js/socket.io-1.2.0.js"></script>
         <script src="/lib/js/jquery-1.11.1.js"></script>
+        <script src="/lib/js/strs.js"></script>
     </head>
     <body>
         <noscript><p>Please turn on Javascript to use this page</p></noscript>
@@ -32,9 +33,9 @@
                     "Your browser information:" + navigator.userAgent)
             }
 
-            var channel = io('/audienceChannel');
+            var channel = io(strs.audienceChannel());
 
-            channel.emit('connected');
+            channel.emit(strs.connect());
           });
 
         </script>
