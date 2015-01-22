@@ -5,6 +5,7 @@ import json
 agenda = {
     'duration': '01:11:11',
     'title': 'Infra workflows',
+    'slides': '3',
     'children': [
       {'title': 'subtitle1', 'start': 1, 'end': 5},
       {'title': 'subtitle2', 'children': 

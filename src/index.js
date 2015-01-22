@@ -2,6 +2,7 @@ var fs = require('fs')
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var strs = require('./lib/js/strs.js');
 
 var pageNumber = 1;
 
@@ -10,20 +11,85 @@ var votes;
 var votedAddress = new Array();
 var questionCounter = 0;
 var connected = new Array();
+var duration = 0;
+var slides = 0;
+var agenda;
 var timer = 0;
-var agenda = {};
 
-var presenterChannel = io.of('/presenterChannel');
-var audienceChannel = io.of('/audienceChannel');
+var presenterChannel = io.of(strs.presenterChannel());
+var askSlide = strs.loadSlide();
 
+// prepare agenda data
+(function(){
+  try {
+    agenda = JSON.parse(fs.readFileSync('agenda/agenda.json', 'utf-8')); 
+    var time = agenda['duration'].split(":");
+    duration = parseInt(time[0]) * 3600 + parseInt(time[1]) * 60 + parseInt(time[2]);
+    slides = parseInt(agenda['slides']);
+  } catch (err) {
+    console.error(err);
+  }
+}());
+
+// *********************************************************
+// help functions
+// *********************************************************
 function setTimer(){
   setTimeout(function(){
-    timer += 1;
-    presenterChannel.emit('update elapsed time', timer)
+    timer += 5;
+    presenterChannel.emit(strs.elapseTime(), timer)
     setTimer();
-  }, 1000);
+  }, 5000);
 }
 
+function load_slide(pageNum, isPresenter, socket) {
+  if (pageNum <= slides && pageNum > 0) {
+    fs.readFile('slides/' + pageNum.toString() + '.html', 'utf-8', function(err, data) {
+      // toggle arrow buttons on audience's slide page
+      if (isPresenter) {
+        pageNumber = pageNum;
+      }
+      else {
+        socket.emit(strs.toggleArrow(), toggleArrowMsg(pageNum-1, slides-1));
+      }
+      socket.emit(askSlide, data);
+    });
+  }
+  else {
+    socket.emit(strs.noMorePages());
+  }
+}
+
+function sentQuestion(num) {
+  var len = questions.length;
+  if(len == 0) {
+    // empty question dialog
+    presenterChannel.emit(strs.toggleArrow(), strs.showNArrow());
+    presenterChannel.emit(strs.showQuestion(), strs.noQuestion());
+  }
+  else {
+    questionCounter += num;
+    presenterChannel.emit(strs.showQuestion(), questions[questionCounter]);
+    presenterChannel.emit(strs.toggleArrow(), toggleArrowMsg(questionCounter, len-1));
+  }
+}
+
+function toggleArrowMsg(currentPos, lastPos) {
+  if(lastPos == 0) {
+    return strs.showNArrow();
+  }
+  if(currentPos == 0) {
+    return strs.showRArrow();
+  }
+  if(currentPos < lastPos) {
+    return strs.showArrows()
+  }
+  return strs.showLArrow();
+}
+
+// *********************************************************
+// routing
+// *********************************************************
 app.get('/ffee1cca7862e99487a93dbc70634af0af288d5f', function(req, res){
   res.sendFile(__dirname + '/phresent.html');
   if (timer == 0) {
@@ -44,168 +110,104 @@ app.get('/lib/*', function(req, res){
   res.sendFile(__dirname + '/lib/' + req.params[0]);
 });
 
-var askSlide = 'load slide'
-function load_slide(pageNum, isPresenter, socket) {
-  fs.readFile('slides/' + pageNum.toString() + '.html', 'utf-8', function(err, data) {
-      var msg = data;
-      if (err) { msg = 'THE END'; }
-      if (!err && isPresenter) { pageNumber = pageNum; }
-      socket.emit(askSlide, msg);
-      audienceChannel.emit('update agenda', pageNum);
-  });
-}
-
-/*
- * presenter channel
- */
+// ********************************************************
+//  presenter channel
+// ********************************************************
 presenterChannel.on('connection', function(socket){
-  // load slide request from presenter
+  // slides handling
   socket.on(askSlide, function(incr) {
     load_slide(pageNumber + incr, true, presenterChannel);
-    });
- 
-  socket.on('load presentation page', function() {
-    load_slide(pageNumber, true, presenterChannel);
-//    presenterChannel.emit('change question number', 
-//                          questions.length);
+    presenterChannel.emit(strs.setQesNum(), questions.length);
     });
 
-  socket.on('ask question', function(question) {
+  // question handling
+  socket.on(strs.submitQuestion(), function(question) {
     questions.push(question);
     console.log(question);
-    presenterChannel.emit('change question number', 
-                          questions.length);
+    presenterChannel.emit(strs.setQesNum(), questions.length);
     });
 
-  socket.on('create votes', function(candidates) {
+  socket.on(strs.removeQuestion(), function() {
+    var len = questions.length - 1;
+    if(len == 0) {
+      questions.pop();
+      questionCounter = 0;
+    }
+    else if(questionCounter == len) {
+      questions.pop();
+      questionCounter -= 1;
+    }
+    else{
+      questions.splice(questionCounter, 1);
+    }
+    presenterChannel.emit(strs.setQesNum(), questions.length);
+    // update question dialog 
+    sentQuestion(0);
+  });
+
+  socket.on(strs.showQuestion(), sentQuestion);
+
+  // voting handling
+  socket.on(strs.initVote(), function(candidates) {
+    votedAddress = new Array();
     votes = {};
     candidates.split('\n').forEach(function(option){
       votes[option] = 0;
     });
-    presenterChannel.emit('show votes', votes);
+    presenterChannel.emit(strs.showVotes(), votes);
     console.log(votes);
   });
 
-  socket.on('total time', function(){
-    fs.readFile('agenda/agenda', 'utf-8', function(err, data) {
-      var msg = data;
-      if (err) { msg = 'THE END'; }
-      if (!err) { msg = JSON.parse(data); }
-      var time = msg['duration'].split(":");
-      console.log(data);
-      console.log(time);
-      var sec = parseInt(time[0]) * 3600 + parseInt(time[1]) * 60 + parseInt(time[2]);
-      console.log(sec);
-      socket.emit('update total time', sec);
+  // status bar
+  socket.on(strs.askDuration(), function(){
+      socket.emit(strs.setDuration(), duration);
     });
-
-  });
-
-
-  socket.on('load questions', function(type) {
-    if (type == 'LOAD') {
-      console.log('send out question!');
-    }
-    else if (type == 'NEXT') {
-      if (questionCounter < questions.length -1 ) {
-        questionCounter += 1;
-      }
-    }
-    else if (type == 'PREVIOUS') {
-      if (questionCounter > 0 ) {
-        questionCounter -= 1;
-      }
-    }
-    else if (type == 'REMOVE') {
-      if (questionCounter == questions.length - 1) {
-        questions.pop();
-        questionCounter -= 1;
-      }
-      else {
-        questions.splice(questionCounter, 1);
-        console.log("splice the questions");
-      }
-      presenterChannel.emit('change question number', 
-                          questions.length)
-    }
-    console.log(questionCounter);
-    console.log(questions);
-    if (questions.length == 0) {
-      presenterChannel.emit('show questions', "QUESTION END");
-    }
-    else {
-      presenterChannel.emit('show questions', questions[questionCounter]);
-    }
-  });
-
-  
 });
 
-/*
- * audience channel
- */
+// ********************************************************
+// audience channel
+// ********************************************************
+var audienceChannel = io.of(strs.audienceChannel());
 audienceChannel.on('connection', function(socket){
-// load slide request from audience
+  // load slide request from audience
   socket.on(askSlide, function(num) {
     load_slide(num, false, socket)
     });
 
-  socket.on('ask votes', function() {
-    socket.emit('ask votes', votes);
-  });
-
-  socket.on('vote', function(vote) {
+  socket.on(strs.vote(), function(vote) {
   var address = socket.handshake.address;
     if (votedAddress.indexOf(address) == -1) {
       votes[vote] += 1;
       votedAddress.push(address);
     }
     console.log(votes);
-    presenterChannel.emit('show votes', votes);
+    presenterChannel.emit(strs.showVotes(), votes);
   });
 
-  socket.on('show votes', function() {
-    presenterChannel.emit('show votes', votes);
+  socket.on(strs.voteOption(), function() {
+    socket.emit(strs.voteOption(), votes);
   });
 
-  socket.on('submit comment', function(comment) {
-    console.log('Get comment');
-    presenterChannel.emit('show comments', comment);
+  socket.on(strs.comment(), function(comment) {
+    presenterChannel.emit(strs.showComment(), comment);
   });
 
-  socket.on('connected', function() {
+  socket.on(strs.connect(), function() {
     var address = socket.handshake.address
     if (connected.indexOf(address) == -1) {
       connected.push(address);
     }
-    presenterChannel.emit('update connected number', connected.length);
+    presenterChannel.emit(strs.connectedNum(), connected.length);
   });
 
-  function isEmptyObject( obj ) {
-    for ( var name in obj ) {
-        return false;
-    }
-    return true;
-  }
-
-  socket.on('load agenda', function() {
-      fs.readFile('agenda/agenda', 'utf-8', function(err, data) {
-        var msg = data;
-        if (err) { msg = 'OPPPPS'; }
-        if (!err) { msg = JSON.parse(data); }
-        console.log(msg);
-        agenda = msg;
-        console.log(agenda);
-        response = JSON.stringify(agenda)
-        socket.emit('load agenda', response);
-
-    });
-
+  socket.on(strs.loadAgenda(), function() {
+    socket.emit(strs.loadAgenda(), JSON.stringify(agenda));
   });
 
-  socket.on('update agenda', function() {
-    socket.emit('update agenda', pageNumber);
+  socket.on(strs.currentPageNum(), function() {
+    socket.emit(strs.currentPageNum(), pageNumber);
   });
+
 });
 
 http.listen(3000, function(){

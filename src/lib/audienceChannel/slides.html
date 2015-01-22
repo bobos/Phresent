@@ -5,15 +5,16 @@
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
-      #present {width: 800px; height: 600px; margin: 0 auto; margin-top: -200px}
-      #previous {background-image: url(/lib/img/previous.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; margin-top: 300px;}
+      #present {width: 800px; height: 600px; margin: 0 auto; margin-top: 0px}
+      #previous {background-image: url(/lib/img/previous.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; margin-top: 0px;}
       #previous:hover {background-position: 0 -44px;}
-      #next {background-image: url(/lib/img/next.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; float:right; margin-top: -444px;}
+      #next {background-image: url(/lib/img/next.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; float:right; margin-top: 0px;}
       #next:hover {background-position: 0 -44px;}
       #home {width:128px; height:128px;}
     </style>
     <script src="/lib/js/socket.io-1.2.0.js"></script>
     <script src="/lib/js/jquery-1.11.1.js"></script>
+    <script src="/lib/js/strs.js"></script>
   </head>
   <body>
     <a id="previous">prev</a>
@@ -21,8 +22,8 @@
     <a id="next">next</a>
 
     <script>
-      var channel = io('/audienceChannel');
-      var askSlide = 'load slide';
+      var channel = io(strs.audienceChannel());
+      var askSlide = strs.loadSlide();
       var pageNum = 0;
       var incr = 0;
       var loading = 0;
@@ -40,21 +41,41 @@
 
       $("#previous").on("click", function() {
         load_slide(-1);
-        return false;
       });
 
       $("#next").on("click", function() {
         load_slide(1);
-        return false;
+      });
+
+      channel.on(strs.toggleArrow(), function(msg) {
+        if(msg == strs.showArrows()) {
+          $('#previous').css('display', 'block');
+          $('#next').css('display', 'block');
+        }
+        if(msg == strs.showNArrow()) {
+          $('#previous').css('display', 'none');
+          $('#next').css('display', 'none');
+        }
+        if(msg == strs.showLArrow()) {
+          $('#previous').css('display', 'block');
+          $('#next').css('display', 'none');
+        }
+        if(msg == strs.showRArrow()) {
+          $('#previous').css('display', 'none');
+          $('#next').css('display', 'block');
+        }
       });
 
       channel.on(askSlide, function(content) {
         loading = 0;
-        if (content != "THE END") {
-            pageNum += incr;
-            $('#present').html(content);
-        }
+        pageNum += incr;
+        $('#present').html(content);
       });
+
+      channel.on(strs.noMorePages(), function() {
+        loading = 0;
+      });
+
     </script>
     <a href="/audiencechannel"><img id="home" src="/lib/audienceChannel/images/home.png"></img></a>
   </body>

@@ -9,22 +9,22 @@
       #present {width: 800px; height: 600px; margin: 0 auto; margin-top: 100px}
       #previous {float: left; min-width: 100px; min-height: 400px; margin-top: 100px;}
       #next {float: right; min-width: 100px; min-height: 400px; margin-top: -600px;}
-      #question {position: absolute; top: 1%; right:1%;}
+      #question {position: absolute; top: 0%; right:0%;}
       #number {position: absolute; top: 1%; right: 1%; z-index:9999; font-size: 20px; border: 3px red solid; background-color: white;}
-      #vote {position: absolute; bottom: 1%; right: 1%; }
+      #vote {position: absolute; top: 0%; left: 0%; }
       #placeholder {width: 600px; height: 480px; min-height: 480px; font-size: 14px; line-height: 1.2em;}
       #previous-question {background-image: url(/lib/img/previous.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; margin-top: 300px;float:left;}
       #previous-question:hover {background-position: 0 -44px;}
       #next-question {background-image: url(/lib/img/next.png); display: inline-block; width: 44px; height: 44px; outline: none; text-indent: -9999px; float:right; margin-top: 300px;}
       #next-question:hover {background-position: 0 -44px;}
       #present-question {min-height:480px; min-width:600px;float:left;}
-      #comment-bar {position:absolute; min-height:150px; min-width:100%; bottom:0;background-color: black; color:white;}
+      #comment-bar {position:absolute; min-height:150px; min-width:100%; bottom:0;background-color: gray; color:white;}
       #comment1 {width:100%; height:100%;}
       #comment2 {width:100%; height:100%;}
       #status-bar {width:100%; min-height: 40px;background-color: grey;}
-      #connected {float:right; font-size:25px; margin-top: 5px;margin-right:250px;}
-      #elapsed-time {float: right; font-size:25px; margin-top: 5px;margin-right: 50px;}
-      #left-time {float:right; font-size:25px; margin-top: 5px; margin-right:50px;}
+      #connected {float:right; font-size:25px; color:white; margin-top: 5px;margin-right:250px;}
+      #elapsed-time {float: right; font-size:25px; color:white; margin-top: 5px;margin-right: 50px;}
+      #left-time {float:right; font-size:25px; color:white; margin-top: 5px; margin-right:50px;}
 
     </style>
     <script src="/lib/js/socket.io-1.2.0.js"></script>
@@ -32,10 +32,12 @@
     <script src="/lib/js/jquery-ui.js"></script>
     <script src="/lib/js/jquery.flot.js"></script>
     <script src="/lib/js/jquery.flot.categories.js"></script>
+    <script src="/lib/js/strs.js"></script>
   </head>
   <body>
+    <img id="vote" src="/lib/img/vote.png" style="width: 3%;"></img>
     <div id="status-bar">
-      <div id="connected">Connected: 0</div>
+      <div id="connected">Audience: 0</div>
       <div id="elapsed-time">Elapsed: </div>
       <div id="left-time">Left: </div>
     </div>
@@ -43,8 +45,7 @@
     <div id="present">html</div>
     <div id="next"></div>
 
-    <img id="question" src="/lib/img/question_answer.png" style="width: 5%;"></img>
-    <img id="vote" src="/lib/img/vote.png"></img>
+    <img id="question" src="/lib/img/question_answer.png" style="width: 3%;"></img>
     <div id="number">0</div>
     <div id="candidates">
       <textarea id="content"></textarea>
@@ -56,7 +57,7 @@
       <a id="previous-question"></a>
       <div id="present-question"></div>
       <a id="next-question"></a>
-      <button id="close-question">Close</button>
+      <button id="close-question">Remove Question From Stack</button>
     
     </div>
     <div id="comment-bar">
@@ -67,32 +68,44 @@
     $(document).init(function(){
       if(!("WebSocket" in window))
       {
-        alert("OOPS your browser does NOT support websocket, Phresent won't " +
+        alert("OOPS your browser does NOT support websocket, Phreesent won't " +
               "work on this browser, please upgrade your browser or try " + 
               "another browser.\r\n\r\n" +
               "Your browser information:" + navigator.userAgent)
       }
     });
     
-    var channel = io('/presenterChannel');
-    var askSlide = 'load slide';
+    var channel = io(strs.presenterChannel());
+    var askSlide = strs.loadSlide();
 
     var dialog;
     var locks = [false, false];
 
-    var totalTime = 0;
+    var duration = 0;
 
-    
+// ****************************************************** 
+// handle loading slides
+// ****************************************************** 
+    channel.emit(askSlide, 0);
 
-    function submitCandidates() {
-      var content = $("#content").val();
-      channel.emit('create votes', content);
-      $("#content").val("");
-      dialog.dialog("close");
-      //Have a dialog to show the vote result
-      $("#vote-result").dialog({width:800, height:600});
+    $("#previous").on("click", function() {
+        channel.emit(askSlide, -1);
+    });
 
-    }
+    $("#next").on("click", function() {
+        channel.emit(askSlide, 1);
+    });
+
+    channel.on(askSlide, function(content) {
+            $('#present').html(content);
+    });
+
+// ****************************************************** 
+// handle voting
+// ****************************************************** 
+    $("#vote").on("click", function() {
+      $("#candidates").dialog("open");
+    });
 
     dialog = $("#candidates").dialog({
       autoOpen: false,
@@ -101,13 +114,20 @@
         Cancel: function() {
           $("#content").val("");
           dialog.dialog("close");
-
-
         }
       }
     });
     
-    channel.on('show votes', function(votes){
+    function submitCandidates() {
+      var content = $("#content").val();
+      channel.emit(strs.initVote(), content);
+      $("#content").val("");
+      dialog.dialog("close");
+      //Have a dialog to show the vote result
+      $("#vote-result").dialog({width:800, height:600});
+    }
+
+    channel.on(strs.showVotes(), function(votes){
       var dataForShown = new Array();
       for (var key in votes) {
         dataForShown.push([key, votes[key]]);
@@ -130,66 +150,59 @@
 
     });
 
-    $("#vote").on("click", function() {
-      $("#candidates").dialog("open");
-    });
-
-    // Load questions
-
-
-    $("#question").on("click", function() {
-      console.log('questions!');
-      $("#questions").dialog({width:800, height:600});
-      channel.emit('load questions', 'LOAD');
-    });
-
-    // Load first page
-    channel.emit('load presentation page');
-    $("#previous").on("click", function() {
-        channel.emit(askSlide, -1);
-        return false;
-    });
-
-    $("#next").on("click", function() {
-        console.log('next!');
-        channel.emit(askSlide, 1);
-        return false;
-    });
-
-    channel.on(askSlide, function(content) {
-        if (content != "THE END") {
-            $('#present').html(content);
-        }
-    });
-
-    channel.on('change question number', function(number) {
+// ****************************************************** 
+// handle questions
+// ******************************************************
+    channel.on(strs.setQesNum(), function(number) {
             $("#number").html(number.toString());
     });
 
-    $("#previous-question").on('click', function () {
-      channel.emit('load questions', 'PREVIOUS');
+    // show current question
+    $("#question").on("click", function() {
+      $("#questions").dialog({width:800, height:600});
+      channel.emit(strs.showQuestion(), 0);
     });
 
+    // show previous question
+    $("#previous-question").on('click', function () {
+      channel.emit(strs.showQuestion(), -1);
+    });
+
+    // show next question
     $("#next-question").on('click', function () {
-      channel.emit('load questions', 'NEXT');
+      channel.emit(strs.showQuestion(), 1);
     });
 
     $("#close-question").on("click", function() {
-      console.log('Send out!');
-      channel.emit('load questions', 'REMOVE');
+      channel.emit(strs.removeQuestion());
     });
 
+    channel.on(strs.showQuestion(), function(question) {
+      $("#present-question").html("<h1>" + question + "</h1>");
+    });
 
-
-    channel.on('show questions', function(question) {
-      if (question == 'QUESTION END') {
-        $("#questions").dialog("close");
+    channel.on(strs.toggleArrow(), function(msg) {
+      if(msg == strs.showArrows()) {
+        $('#previous-question').css('display', 'initial');
+        $('#next-question').css('display', 'initial');
       }
-      else {
-        $("#present-question").html("<h1>" + question + "</h1>");
+      if(msg == strs.showNArrow()) {
+        $('#previous-question').css('display', 'none');
+        $('#next-question').css('display', 'none');
+      }
+      if(msg == strs.showLArrow()) {
+        $('#previous-question').css('display', 'initial');
+        $('#next-question').css('display', 'none');
+      }
+      if(msg == strs.showRArrow()) {
+        $('#previous-question').css('display', 'none');
+        $('#next-question').css('display', 'initial');
       }
     });
 
+// ****************************************************** 
+// handle comments
+// ******************************************************
     function unlock(number) {
       locks[number] = false;
       console.log("Unlock!");
@@ -226,7 +239,7 @@
       }
 
     }
-    channel.on('show comments', function(comment) {
+    channel.on(strs.showComment(), function(comment) {
       var result = showComment(comment);
       if (result == -1) {
           console.log('Wait!');
@@ -237,14 +250,17 @@
     //  }
     });
 
-    channel.on('update connected number', function(number) {
+// ****************************************************** 
+// status bar
+// ******************************************************
+    channel.on(strs.connectedNum(), function(number) {
       $("#connected").html("Connected: " + number.toString());
     });
 
-    channel.emit('total time');
+    channel.emit(strs.askDuration());
 
-    channel.on('update total time', function(sec){
-      totalTime = sec;
+    channel.on(strs.setDuration(), function(sec){
+      duration = sec;
     });
 
     function formatTime(number) {
@@ -265,9 +281,9 @@
       return time;
     }
 
-    channel.on('update elapsed time', function(number){
+    channel.on(strs.elapseTime(), function(number){
       var elapsedTime = formatTime(number);
-      var leftTime = formatTime(totalTime - number);
+      var leftTime = formatTime(duration - number);
       $("#elapsed-time").html("Elapsed: " + elapsedTime);
       $("#left-time").html("Left: " + leftTime)
     });

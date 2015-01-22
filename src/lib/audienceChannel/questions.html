@@ -8,13 +8,14 @@
         <script src="/lib/js/socket.io-1.2.0.js"></script>
         <script src="/lib/js/jquery-1.11.1.js"></script>
         <script src="/lib/js/jquery-ui.js"></script>
+        <script src="/lib/js/strs.js"></script>
         <script>
             $(function() {
-                var channel = io('/presenterChannel');
+                var channel = io(strs.presenterChannel());
 
                 function submitQuestion() {
                     var content = $( "#content" ).val();
-                    channel.emit('ask question', content);
+                    channel.emit(strs.submitQuestion(), content);
                     $( "#content" ).val("");
                     dialog.dialog( "close" );
                 }

@@ -2,14 +2,15 @@
     <head>
         <script src="/lib/js/socket.io-1.2.0.js"></script>
         <script src="/lib/js/jquery-1.11.1.js"></script>
+        <script src="/lib/js/strs.js"></script>
 
         <script>
         $(document).init(function() {
-            var channel = io('/audienceChannel');
+            var channel = io(strs.audienceChannel());
 
             $("#submit").on('click', function() {
               var comment = $("#comment").val();
-              channel.emit('submit comment', comment);
+              channel.emit(strs.comment(), comment);
               $("#comment").val("");
             });
             

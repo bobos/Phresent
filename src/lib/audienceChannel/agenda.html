@@ -8,14 +8,23 @@
       </style>
       <script src="/lib/js/socket.io-1.2.0.js"></script>
       <script src="/lib/js/jquery-1.11.1.js"></script>
+      <script src="/lib/js/strs.js"></script>
       <script>
-        var channel = io('/audienceChannel');
+        var channel = io(strs.audienceChannel());
         var agenda = {};
         var catalogue = {};
         var catalogueFull = {};
 
-        channel.emit('load agenda');
-        channel.emit('update agenda');
+        channel.emit(strs.loadAgenda());
+        channel.emit(strs.currentPageNum());
+
+        function refresh_agenda(){
+          setTimeout(function(){
+            channel.emit(strs.currentPageNum());
+            refresh_agenda();
+          }, 5000);
+        };
+        refresh_agenda();
 
         function loadAgenda(data, size) {
           var title = new Array();
@@ -46,14 +55,14 @@
           });
         }
 
-        channel.on('load agenda', function(data) {
+        channel.on(strs.loadAgenda(), function(data) {
           console.log(data);
           agenda = JSON.parse(data);
           $("#agenda").html("<h1>" + agenda['title'] + "</h1>");
           loadAgenda(agenda["children"], 2);
         });
 
-        channel.on('update agenda', function(page) {
+        channel.on(strs.currentPageNum(), function(page) {
           var title = catalogueFull[page];
           var start = catalogue[title];
           console.log("#" + title + start);
