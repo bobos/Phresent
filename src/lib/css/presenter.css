@@ -1,0 +1,146 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font: 13px Helvetica, Arial;
+}
+
+#present {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+  margin-top: 100px
+}
+
+#previous {
+  float: left;
+  min-width: 100px;
+  min-height: 400px;
+  margin-top: 100px;
+}
+
+#next {
+  float: right;
+  min-width: 100px;
+  min-height: 400px;
+  margin-top: -600px;
+}
+
+#question {
+  position: absolute;
+  top: 0%;
+  right: 0%;
+}
+
+#number {
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  z-index: 9999;
+  font-size: 20px;
+  border: 3px red solid;
+  background-color: white;
+}
+
+#vote {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+}
+
+#placeholder {
+  width: 600px;
+  height: 480px;
+  min-height: 480px;
+  font-size: 14px;
+  line-height: 1.2em;
+}
+
+#previous-question {
+  background-image: url(/lib/img/previous.png);
+  display: inline-block;
+  width: 44px;
+  height: 44px;
+  outline: none;
+  text-indent: -9999px;
+  margin-top: 300px;
+  float: left;
+}
+
+#previous-question:hover {
+  background-position: 0 -44px;
+}
+
+#next-question {
+  background-image: url(/lib/img/next.png);
+  display: inline-block;
+  width: 44px;
+  height: 44px;
+  outline: none;
+  text-indent: -9999px;
+  float: right;
+  margin-top: 300px;
+}
+
+#next-question:hover {
+  background-position: 0 -44px;
+}
+
+#present-question {
+  min-height: 480px;
+  min-width: 600px;
+  float: left;
+}
+
+#comment-bar {
+  position: absolute;
+  min-height: 150px;
+  min-width: 100%;
+  bottom: 0;
+  background-color: gray;
+  color: white;
+}
+
+#comment1 {
+  width: 100%;
+  height: 100%;
+}
+
+#comment2 {
+  width: 100%;
+  height: 100%;
+}
+
+#status-bar {
+  width: 100%;
+  min-height: 40px;
+  background-color: grey;
+}
+
+#connected {
+  float: right;
+  font-size: 25px;
+  color: white;
+  margin-top: 5px;
+  margin-right: 250px;
+}
+
+#elapsed-time {
+  float: right;
+  font-size: 25px;
+  color: white;
+  margin-top: 5px;
+  margin-right: 50px;
+}
+
+#left-time {
+  float: right;
+  font-size: 25px;
+  color: white;
+  margin-top: 5px;
+  margin-right: 50px;
+}
+
