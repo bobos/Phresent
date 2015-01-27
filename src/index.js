@@ -15,6 +15,7 @@ var duration = 0;
 var slides = 0;
 var agenda;
 var timer = 0;
+var favourites = {};
 
 var presenterChannel = io.of(strs.presenterChannel());
 var askSlide = strs.loadSlide();
@@ -207,6 +208,26 @@ audienceChannel.on('connection', function(socket){
   socket.on(strs.currentPageNum(), function() {
     socket.emit(strs.currentPageNum(), pageNumber);
   });
+
+  socket.on(strs.plusOne(), function(topic){
+    var address = socket.handshake.address;
+    if (topic in favourites) {
+      if (favourites[topic].indexOf(address) == -1) {
+        favourites[topic].push(address);
+      }
+    }
+    else {
+      favourites[topic] = [address];
+    }
+    console.log(favourites);
+
+  });
+
+  socket.on(strs.currentFavourites(), function() {
+    console.log('Update favourites');
+    socket.emit(strs.currentFavourites(), favourites);
+  });
+
 
 });
 

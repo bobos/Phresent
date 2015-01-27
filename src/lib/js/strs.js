@@ -113,4 +113,12 @@
     return 'show comment on presentation page';
   };
 
+  exports.plusOne = function(){
+    return 'plus one on topic';
+  };
+
+  exports.currentFavourites = function(){
+    return 'current favourites';
+  };
+
 }(typeof exports === 'undefined' ? this.strs = {} : exports));
