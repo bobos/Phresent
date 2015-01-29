@@ -111,6 +111,7 @@ app.get('/lib/*', function(req, res){
   res.sendFile(__dirname + '/lib/' + req.params[0]);
 });
 
+var audienceChannel = io.of(strs.audienceChannel());
 // ********************************************************
 //  presenter channel
 // ********************************************************
@@ -159,6 +160,10 @@ presenterChannel.on('connection', function(socket){
     console.log(votes);
   });
 
+  socket.on(strs.endVote(), function() {
+    audienceChannel.emit(strs.endVote());
+  });
+
   // status bar
   socket.on(strs.askDuration(), function(){
       socket.emit(strs.setDuration(), duration);
@@ -168,7 +173,6 @@ presenterChannel.on('connection', function(socket){
 // ********************************************************
 // audience channel
 // ********************************************************
-var audienceChannel = io.of(strs.audienceChannel());
 audienceChannel.on('connection', function(socket){
   // load slide request from audience
   socket.on(askSlide, function(num) {
