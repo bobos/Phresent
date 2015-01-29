@@ -209,13 +209,13 @@
     function showComment(comment){
       var choice = chooseCommentBar();
       if (choice == 0) {
-        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee bgcolor='#0000040' width='100%' loop='1'><strong>" + comment + "<strong></marquee></font>");
+        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee bgcolor='#0000040' width='100%' loop='1' scrollamount='25'><strong>" + comment + "<strong></marquee></font>");
         setTimeout(function() {locks[choice]=false; console.log("reset" + choice.toString())}, 25000);
         console.log("1st comment");
         return choice;
       }
       else if (choice == 1) {
-        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee bgcolor='#0000040' width='100%' loop='1'><strong>" + comment + "<strong></marquee></font>");
+        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee bgcolor='#0000040' width='100%' loop='1' scrollamount='25'><strong>" + comment + "<strong></marquee></font>");
         setTimeout(function() {locks[choice]=false; console.log("reset" + choice.toString())}, 25000);
         console.log("2nd comment");
         return choice;
