@@ -98,7 +98,11 @@
         }
       }
     });
-    
+
+    $('div#vote-result').on('dialogclose', function(event) {
+      channel.emit(strs.endVote());
+    });
+
     function submitCandidates() {
       var content = $("#content").val();
       channel.emit(strs.initVote(), content);
@@ -107,6 +111,8 @@
       //Have a dialog to show the vote result
       $("#vote-result").dialog({width:800, height:600});
     }
+
+
 
     channel.on(strs.showVotes(), function(votes){
       var dataForShown = new Array();

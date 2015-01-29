@@ -27,6 +27,10 @@
                 $('#submit').css('display', 'block');
                 presentVoteOptions(votes);
             });
+            channel.on(strs.endVote(), function() {
+              $("#vote").html("");
+              $("#submit").css("display", "none");
+            });
         });
         </script>
     </head>
