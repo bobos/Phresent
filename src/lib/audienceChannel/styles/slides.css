@@ -8,9 +8,6 @@ body {
   font: 13px Helvetica, Arial;
 }
 
-#present {
-  width: 800px;
-  height: 600px;
-  margin: 0 auto;
-  margin-top: 0px
+#container {
+  position: relative;
 }

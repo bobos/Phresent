@@ -13,16 +13,35 @@
               channel.emit(strs.comment(), comment);
               $("#comment").val("");
             });
+
+            // Set limitation for the textarea
+            $('textarea').keypress(function(e) {
+              var tval = $('textarea').val();
+              var tlength = tval.length;
+              var set = 140;
+              var remain = parseInt(set - tlength);
+              $('p').text(remain);
+              if (remain <= 0 && e.which !== 0 && e.charCode !== 0) {
+                $('textarea').val((tval).substring(0, tlength - 1));
+              }
+            });
+
+            // Go to home page
+            $("#home").on('click', function() {
+              window.location.replace('/audienceChannel');
+            });
             
         });
         </script>
         <link rel="stylesheet" href="/lib/audienceChannel/styles/common.css">
         <link rel="stylesheet" href="/lib/audienceChannel/styles/comment.css">
+        <link rel="stylesheet" href="/lib/audienceChannel/lib/jquerymobile/jquery.mobile-1.4.5.min.css" />
+        <script src="/lib/audienceChannel/lib/jquerymobile/jquery.mobile-1.4.5.min.js"></script>
     </head>
 
     <body>
-        <h1>Comment</h1>
-        <textarea id="comment"></textarea>
+        <textarea id="comment" rows="8" placeholder="Input your comment here, less than 140 letters..."></textarea>
+        <br />
         <button id="submit">Submit</button>
         <a href="/audiencechannel"><img id="home" src="/lib/audienceChannel/images/home.png"></img></a>
     </body>

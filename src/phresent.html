@@ -4,6 +4,7 @@
     <title>Presenter Channel</title>
     <link rel="stylesheet" href="/lib/css/jquery-ui.css">
     <link rel="stylesheet" href="/lib/css/presenter.css">
+    <link rel="stylesheet" href="/lib/Font-Awesome/css/font-awesome.min.css">
     <script src="/lib/js/socket.io-1.2.0.js"></script>
     <script src="/lib/js/jquery-1.11.1.js"></script>
     <script src="/lib/js/jquery-ui.js"></script>
@@ -95,7 +96,11 @@
         }
       }
     });
-    
+
+    $('div#vote-result').on('dialogclose', function(event) {
+      channel.emit(strs.endVote());
+    });
+
     function submitCandidates() {
       var content = $("#content").val();
       channel.emit(strs.initVote(), content);
@@ -104,6 +109,8 @@
       //Have a dialog to show the vote result
       $("#vote-result").dialog({width:800, height:600});
     }
+
+
 
     channel.on(strs.showVotes(), function(votes){
       var dataForShown = new Array();
@@ -200,13 +207,13 @@
     function showComment(comment){
       var choice = chooseCommentBar();
       if (choice == 0) {
-        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee bgcolor='#0000040' width='100%' loop='1'><strong>" + comment + "<strong></marquee></font>");
+        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee bgcolor='#0000040' width='100%' loop='1' scrollamount='25'><strong>" + comment + "<strong></marquee></font>");
         setTimeout(function() {locks[choice]=false; console.log("reset" + choice.toString())}, 25000);
         console.log("1st comment");
         return choice;
       }
       else if (choice == 1) {
-        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee bgcolor='#0000040' width='100%' loop='1'><strong>" + comment + "<strong></marquee></font>");
+        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee bgcolor='#0000040' width='100%' loop='1' scrollamount='25'><strong>" + comment + "<strong></marquee></font>");
         setTimeout(function() {locks[choice]=false; console.log("reset" + choice.toString())}, 25000);
         console.log("2nd comment");
         return choice;
