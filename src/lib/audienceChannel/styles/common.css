@@ -36,9 +36,9 @@
 #homebar{
   background-color: gray;
   height: 6em;
-  padding: 1em 0em 0em 0em;
+  padding: 1em 0em 1em 0em;
   text-align: center;
-  position: absolute;
+  position: fixed;
   bottom: 0em;
   left: 0em;
   right: 0em;
@@ -49,6 +49,7 @@
 #homeicon{
   color: white;
   margin: 0em;
+  width: 6em;
 
 #present {
   min-width: 100%;
