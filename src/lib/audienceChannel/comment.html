@@ -20,7 +20,7 @@
             $('textarea').keypress(function(e) {
               var tval = $('textarea').val();
               var tlength = tval.length;
-              var set = 140;
+              var set = 50;
               var remain = parseInt(set - tlength);
               $('p').text(remain);
               if (remain <= 0 && e.which !== 0 && e.charCode !== 0) {
