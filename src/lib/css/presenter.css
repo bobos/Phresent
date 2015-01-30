@@ -144,3 +144,7 @@ body {
   margin-right: 50px;
 }
 
+
+.ui-dialog-titlebar {
+  display: none;
+}
