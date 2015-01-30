@@ -2,7 +2,7 @@
 <html class="no-js">
     <head>
     <link rel="stylesheet" href="/lib/audienceChannel/styles/metro-bootstrap.css">
-    <link rel="stylesheet" href="http://metroui.org.ua/css/metro-bootstrap-responsive.css">
+    <link rel="stylesheet" href="/lib/audienceChannel/styles/iconFont.css">
     <link rel="stylesheet" href="/lib/audienceChannel/styles/common.css">
     <link rel="stylesheet" href="/lib/audienceChannel/styles/agenda.css">
       <script src="/lib/js/socket.io-1.2.0.js"></script>
@@ -34,10 +34,13 @@
           data.forEach(function(subtitle) {
             console.log(size);
             console.log(subtitle['title']);
-            indent = (size*15).toString()
-            divStart = "<a href='#' class='list marked' style='margin-left:" + indent +"px'><div class='list-content'>"
-            content = "<span class='list-title' style='display:inline'>" + subtitle['title'] + "</span>";
-            content += "<img class='plus' src='/lib/audienceChannel/images/star.png' name='" + subtitle['title'] + "'>";
+            indent = (size*15).toString();
+            var title_id = subtitle['title'].replace(/ /g, '-');
+            title_id = title_id.replace('?', '');
+            console.log(title_id);
+            divStart = "<a href='#' id='" + title_id + "' class='list marked' style='margin-left:10px;padding-left:" + indent +"px'><div class='list-content'>"
+            content = "<span class='list-title' style='display:inline;font-size:100%'>" + subtitle['title'] + "</span>";
+            content += "<span><img class='plus' src='/lib/audienceChannel/images/star.png' name='" + title_id + "'></span>";
             divEnd = "</div></a>"
             //tagStart = "<h" + size.toString() + " id='" + subtitle['title'] + subtitle["start"] + "' class='topic' name='" + subtitle['title'] + "'>";
             //plusOne = "<div class='plus' id='" + subtitle['title'] + "'name='" + subtitle['title'] + "'>+</div>";
@@ -91,18 +94,22 @@
         channel.on(strs.currentPageNum(), function(page) {
           var title = catalogueFull[page];
           var start = catalogue[title];
-          console.log("#" + title + start);
-          $("#" + title + start).addClass("highlight");
+          console.log("#" + title);
+          var title_id = title.replace(/ /g, '-');
+          title_id = title_id.replace('?', '');
+          console.log("#" + title_id);
+          if (! $("#" + title_id).hasClass("selected")) {
+              $("#" + title_id).addClass("selected");}
           console.log("Get page update!!!");
           console.log(page);
         });
 
-        channel.on(strs.currentFavourites(), function(favourites) {
-          console.log('Get favourites updated!');
-          for (topic in favourites) { 
-            $("#" + topic).html("+ " + favourites[topic].length);
-          }
-        });
+        //channel.on(strs.currentFavourites(), function(favourites) {
+          //console.log('Get favourites updated!');
+          //for (topic in favourites) { 
+            //$("#" + topic).html("+ " + favourites[topic].length);
+          //}
+        //});
 
 
       </script>

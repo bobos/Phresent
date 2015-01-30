@@ -111,6 +111,11 @@ app.get('/lib/*', function(req, res){
   res.sendFile(__dirname + '/lib/' + req.params[0]);
 });
 
+// images, js, css etc for slides.  
+app.get('/slides/*', function(req, res){
+  res.sendFile(__dirname + '/slides/' + req.params[0]);
+});
+
 var audienceChannel = io.of(strs.audienceChannel());
 // ********************************************************
 //  presenter channel
@@ -149,6 +154,10 @@ presenterChannel.on('connection', function(socket){
 
   socket.on(strs.showQuestion(), sentQuestion);
 
+  socket.on(strs.getAllQuestions(), function() {
+    presenterChannel.emit(strs.getAllQuestions(), questions);
+  });
+
   // voting handling
   socket.on(strs.initVote(), function(candidates) {
     votedAddress = new Array();
@@ -164,10 +173,15 @@ presenterChannel.on('connection', function(socket){
     audienceChannel.emit(strs.endVote());
   });
 
+  socket.on(strs.getAllVotes(), function() {
+    presenterChannel.emit(strs.getAllVotes(), votes);
+  });
+
   // status bar
   socket.on(strs.askDuration(), function(){
       socket.emit(strs.setDuration(), duration);
-    });
+  });
+
 });
 
 // ********************************************************
