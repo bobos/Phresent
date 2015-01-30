@@ -33,6 +33,23 @@
 #next:hover {
   background-position: 0 -44px;
 }
+#homebar{
+  background-color: gray;
+  height: 6em;
+  padding: 1em 0em 1em 0em;
+  text-align: center;
+  position: fixed;
+  bottom: 0em;
+  left: 0em;
+  right: 0em;
+  width: 100%;
+  z-index: 999;
+  opacity: 0.7
+}
+#homeicon{
+  color: white;
+  margin: 0em;
+  width: 6em;
 
 #present {
   min-width: 100%;

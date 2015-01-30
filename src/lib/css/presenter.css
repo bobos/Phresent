@@ -107,6 +107,8 @@ body {
   bottom: 0;
   background-color: gray;
   color: white;
+  opacity: 0.7;
+  z-index: 9999;
 }
 
 #comment1 {
@@ -123,6 +125,8 @@ body {
   width: 100%;
   min-height: 40px;
   background-color: grey;
+  opacity: 0.7;
+  z-index: 9999;
 }
 
 #connected {
