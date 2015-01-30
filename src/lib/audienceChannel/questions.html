@@ -17,8 +17,10 @@
 
                 $("#submit").on('click', function() {
                     var content = $( "#question" ).val();
-                    channel.emit(strs.submitQuestion(), content);
-                    $( "#question" ).val("");
+                    if (content != "") {
+                      channel.emit(strs.submitQuestion(), content);
+                      $( "#question" ).val("");
+                    }
                 });
 
                 // Set limitation for the textarea
@@ -42,8 +44,8 @@
         </script>
     </head>
     <body>
-        <textarea id="question" rows="8" placeholder="Input your comment here, less than 140 letters..."></textarea>
-        <button id="submit">Submit</button>
+        <textarea id="question" rows="8" placeholder="Input your question here, less than 140 letters..."></textarea>
+        <a id="submit" class="ui-btn ui-btn-b">Submit</a>
         <img id="home" src="/lib/audienceChannel/images/home.png"></img>
         <div id="homebar"><a href="/audiencechannel"><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
     </body>

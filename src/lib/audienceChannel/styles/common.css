@@ -57,3 +57,7 @@
   position: fixed;
   top: 10%;
 }
+
+#submit {
+  font-size: 60px;
+}
