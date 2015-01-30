@@ -65,6 +65,10 @@
     return 'initiate a vote';
   };
 
+  exports.endVote = function(){
+    return 'end a vote';
+  };
+
   exports.setQesNum = function(){
     return 'set number of open questions on presentation page';
   };

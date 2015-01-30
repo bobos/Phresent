@@ -1,20 +1,21 @@
 #!/usr/bin/env python
 import json
 agenda = {
-    'duration': '01:11:11',
-    'slides': '3',
-    'title': 'Infra workflows',
+    'duration': '00:30:00',
+    'slides': '12',
+    'title': 'A Gentle Introduction to SGSN-MME Infra',
     'children': [
-        {'title': 'subtitle1', 'start': 1, 'end': 5},
-        {'title': 'subtitle2', 'children':
+        {'title': 'Who Are SGSN-MME Infra?', 'start': 2, 'end': 3},
+        {'title': 'What SGSN-MME Infra Support?', 'start': 4, 'end': 4},
+        {'title': 'When You Need To Contact Infra?', 'start': 5, 'end': 5},
+        {'title': 'How To Contact Infra', 'children':
             [
-                {'title': 'subsubtitle1', 'start': '6', 'end': '7'},
-                {'title': 'subsubtitle2', 'start': '8', 'end': '10'},
+                {'title': 'Handle New Requirement', 'start': '6', 'end': '8'},
+                {'title': 'Handle Bug', 'start': '9', 'end': '9'},
+                {'title': 'Handle Support', 'start': '10', 'end': '10'},
             ]},
-        {'title': 'subtitle3', 'children':
-            [
-                {'title': 'subsubtitle3', 'start': '11', 'end' : '13'}
-            ]}
+        {'title': 'Infra Under The Hood', 'start': 11, 'end': 11},
+        {'title': 'Question And Answer', 'start': 12, 'end': 12},
     ],
 }
 print json.dumps(agenda)

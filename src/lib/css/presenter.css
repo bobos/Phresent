@@ -9,24 +9,29 @@ body {
 }
 
 #present {
-  width: 800px;
-  height: 600px;
-  margin: 0 auto;
-  margin-top: 100px
+  min-width: 100%;
+  min-height: 90%;
+  position: fixed;
+  top: 10%;
 }
 
 #previous {
   float: left;
   min-width: 100px;
   min-height: 400px;
-  margin-top: 100px;
+  position: fixed;
+  top: 10%;
+  z-index: 99999;
 }
 
 #next {
   float: right;
   min-width: 100px;
   min-height: 400px;
-  margin-top: -600px;
+  position: fixed;
+  right: 0%;
+  top: 10%;
+  z-index: 99999;
 }
 
 #question {
@@ -144,3 +149,7 @@ body {
   margin-right: 50px;
 }
 
+
+.ui-dialog-titlebar {
+  display: none;
+}

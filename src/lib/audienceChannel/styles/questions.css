@@ -1,4 +1,4 @@
-#home {
-  width: 128px;
-  height: 128px;
+#question {
+  height: auto !important; /* !important is used to force override. */
+  font-size: 300%;
 }
