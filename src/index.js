@@ -232,6 +232,18 @@ audienceChannel.on('connection', function(socket){
 
   });
 
+  socket.on(strs.minusOne(), function(topic){
+    var address = socket.handshake.address;
+    if (topic in favourites) {
+      var id = favourites[topic].indexOf(address);
+      if (id != -1) {
+        favourites[topic].splice(id, 1);
+      }
+    }
+    console.log(favourites);
+
+  });
+
   socket.on(strs.currentFavourites(), function() {
     console.log('Update favourites');
     socket.emit(strs.currentFavourites(), favourites);
