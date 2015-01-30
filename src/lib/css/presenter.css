@@ -102,6 +102,7 @@ body {
   bottom: 0;
   background-color: gray;
   color: white;
+  opacity: 0.7;
 }
 
 #comment1 {
@@ -118,6 +119,7 @@ body {
   width: 100%;
   min-height: 40px;
   background-color: grey;
+  opacity: 0.7;
 }
 
 #connected {

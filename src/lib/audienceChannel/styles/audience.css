@@ -206,7 +206,7 @@ body {
 }
 
 .button-button.skin-presenter {
-  background-image: url(../images/presenter.png);
+ // background-image: url(../images/presenter.png);
   background-color: #ff6622;
   box-shadow: 0 1px 0 0 #bb3a00;
 }
