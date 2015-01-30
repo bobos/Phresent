@@ -4,7 +4,6 @@
     <title>Presenter Channel</title>
     <link rel="stylesheet" href="/lib/css/jquery-ui.css">
     <link rel="stylesheet" href="/lib/css/presenter.css">
-    <link rel="stylesheet" href="/lib/Font-Awesome/css/font-awesome.min.css">
     <script src="/lib/js/socket.io-1.2.0.js"></script>
     <script src="/lib/js/jquery-1.11.1.js"></script>
     <script src="/lib/js/jquery-ui.js"></script>
@@ -53,10 +52,17 @@
       }
     });
     
+    // Init the buttons
+    $( "input[type=submit], button" )
+      .button()
+      .click(function( event ) {
+        event.preventDefault();
+      });
     var channel = io(strs.presenterChannel());
     var askSlide = strs.loadSlide();
 
     var dialog;
+    var questionDialog;
     var favourites = {};
     var locks = [false, false];
 
@@ -144,9 +150,21 @@
 
     // show current question
     $("#question").on("click", function() {
-      $("#questions").dialog({width:800, height:600});
+      $("#questions").dialog('open');
       channel.emit(strs.showQuestion(), 0);
     });
+
+    dialog = $("#questions").dialog({
+      autoOpen: false,
+      width: 800,
+      height: 600,
+      buttons: {
+        Close: function() {
+          dialog.dialog("close");
+        }
+      }
+    });
+
 
     // show previous question
     $("#previous-question").on('click', function () {
