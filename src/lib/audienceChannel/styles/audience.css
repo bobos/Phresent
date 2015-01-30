@@ -162,10 +162,11 @@ body {
   left: 70px;
   right: 10px;
   top: 25px;
+  padding-top: 1.7em;
   position: absolute;
   display: block;
   color: #fff;
-  font-size: 100%;
+  font-size: 5em;
   line-height: 1.2;
   text-align: left;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
@@ -207,7 +208,7 @@ body {
 
 .button-button.skin-presenter {
   background-image: url(../images/presenter.png);
-  background-color: #ff6622;
+  background-color: #449922;
   box-shadow: 0 1px 0 0 #bb3a00;
 }
 
@@ -217,7 +218,7 @@ body {
 
 .button-button.skin-codex {
   background-image: url(../images/codex.png);
-  background-color: #0097e0;
+  background-color: #111111;
   box-shadow: 0 1px 0 0 #00527a;
 }
 
@@ -227,7 +228,7 @@ body {
 
 .button-button.skin-agenda {
   background-image: url(../images/agenda.png);
-  background-color: #0097e0;
+  background-color: #ff6622;
   box-shadow: 0 1px 0 0 #00527a;
 }
 
@@ -237,7 +238,7 @@ body {
 
 .button-button.skin-question {
   background-image: url(../images/question.png);
-  background-color: #2aa9e0;
+  background-color: #0055aa;
   box-shadow: 0 1px 0 0 #156a8f;
 }
 
@@ -247,7 +248,7 @@ body {
 
 .button-button.skin-slides {
   background-image: url(../images/slides.png);
-  background-color: #0055aa;
+  background-color: #0097e0;
   box-shadow: 0 1px 0 0 #002244;
 }
 
@@ -257,11 +258,11 @@ body {
 
 .button-button.skin-vote {
   background-image: url(../images/vote.png);
-  background-color: rgb(184, 59, 245);
+  background-color: #002244;
   box-shadow: 0 1px 0 0 rgb(228, 186, 249);
 }
 
-.button-button.skin-vote {
+.button-button.skin-vote:focus {
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8), 0 0 0 4px rgb(210, 136, 247);
 }
 
