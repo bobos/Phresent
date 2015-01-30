@@ -39,6 +39,11 @@ body {
   top: 0%;
   right: 0%;
 }
+#report {
+  position: absolute;
+  top: 0%;
+  right: 12%;
+}
 
 #number {
   position: absolute;
