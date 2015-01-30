@@ -1,6 +1,8 @@
 <!doctype html>
 <html class="no-js">
     <head>
+    <link rel="stylesheet" href="/lib/audienceChannel/styles/metro-bootstrap.css">
+    <link rel="stylesheet" href="http://metroui.org.ua/css/metro-bootstrap-responsive.css">
     <link rel="stylesheet" href="/lib/audienceChannel/styles/common.css">
     <link rel="stylesheet" href="/lib/audienceChannel/styles/agenda.css">
       <script src="/lib/js/socket.io-1.2.0.js"></script>
@@ -32,10 +34,15 @@
           data.forEach(function(subtitle) {
             console.log(size);
             console.log(subtitle['title']);
-            tagStart = "<h" + size.toString() + " id='" + subtitle['title'] + subtitle["start"] + "' class='topic' name='" + subtitle['title'] + "'>";
-            plusOne = "<div class='plus' id='" + subtitle['title'] + "'name='" + subtitle['title'] + "'>+</div>";
-            tagEnd = "</h" + size.toString() + ">";
-            indent = Array((size - 1) * 4).join("&nbsp;");
+            indent = (size*15).toString()
+            divStart = "<a href='#' class='list marked' style='margin-left:" + indent +"px'><div class='list-content'>"
+            content = "<span class='list-title' style='display:inline'>" + subtitle['title'] + "</span>";
+            content += "<img class='plus' src='/lib/audienceChannel/images/star.png' name='" + subtitle['title'] + "'>";
+            divEnd = "</div></a>"
+            //tagStart = "<h" + size.toString() + " id='" + subtitle['title'] + subtitle["start"] + "' class='topic' name='" + subtitle['title'] + "'>";
+            //plusOne = "<div class='plus' id='" + subtitle['title'] + "'name='" + subtitle['title'] + "'>+</div>";
+            //tagEnd = "</h" + size.toString() + ">";
+            //indent = Array((size - 1) * 4).join("&nbsp;");
 
             var page = "";
             if (("start" in subtitle) && ("end" in subtitle)) {
@@ -45,7 +52,8 @@
                 catalogueFull[i] = subtitle['title'];
               }
             }
-            $("#agenda").append(tagStart + indent + plusOne + subtitle['title'] + page + tagEnd);
+            //$("#agenda").append(tagStart + indent + plusOne + subtitle['title'] + page + tagEnd);
+            $("#agenda").append(divStart + content + divEnd);
               if ("children" in subtitle) {
                 loadAgenda(subtitle['children'], size + 1);
               }
@@ -59,11 +67,23 @@
         channel.on(strs.loadAgenda(), function(data) {
           console.log(data);
           agenda = JSON.parse(data);
-          $("#agenda").html("<h1>" + agenda['title'] + "</h1>");
+          console.log(agenda['title']);
+          $("#agenda").html('<div class="list-content">');
+          $("#agenda").html("<span>" + agenda['title'] + "</span>");
+          $("#agenda").html('</div>');
           loadAgenda(agenda["children"], 2);
           $(".plus").on('click', function() {
+            
             var topic = $(this).attr('name');
-            channel.emit(strs.plusOne(), topic);
+            var src = $(this).attr('src')
+            if (src.lastIndexOf('star.png') != -1) {
+                $(this).attr('src', '/lib/audienceChannel/images/star_1.png');
+                channel.emit(strs.plusOne(), topic);
+            }
+            else {
+                $(this).attr('src', '/lib/audienceChannel/images/star.png');
+                channel.emit(strs.minusOne(), topic);
+            }
           });
 
         });
@@ -87,9 +107,9 @@
 
       </script>
     </head>
-    <body>
+    <body class="metro">
     <h1>presentation agenda goes here!</h1>
-    <div id="agenda"></div>
+    <div id="agenda" class="listview-outlook" data-role="listview"></div>
     <div id="homebar"><a href="/audiencechannel"><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
     </body>
 </html>

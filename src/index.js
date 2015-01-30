@@ -111,6 +111,11 @@ app.get('/lib/*', function(req, res){
   res.sendFile(__dirname + '/lib/' + req.params[0]);
 });
 
+// images, js, css etc for slides.  
+app.get('/slides/*', function(req, res){
+  res.sendFile(__dirname + '/slides/' + req.params[0]);
+});
+
 var audienceChannel = io.of(strs.audienceChannel());
 // ********************************************************
 //  presenter channel
@@ -222,6 +227,18 @@ audienceChannel.on('connection', function(socket){
     }
     else {
       favourites[topic] = [address];
+    }
+    console.log(favourites);
+
+  });
+
+  socket.on(strs.minusOne(), function(topic){
+    var address = socket.handshake.address;
+    if (topic in favourites) {
+      var id = favourites[topic].indexOf(address);
+      if (id != -1) {
+        favourites[topic].splice(id, 1);
+      }
     }
     console.log(favourites);
 
