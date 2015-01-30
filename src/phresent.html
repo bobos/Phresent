@@ -52,10 +52,17 @@
       }
     });
     
+    // Init the buttons
+    $( "input[type=submit], button" )
+      .button()
+      .click(function( event ) {
+        event.preventDefault();
+      });
     var channel = io(strs.presenterChannel());
     var askSlide = strs.loadSlide();
 
     var dialog;
+    var questionDialog;
     var favourites = {};
     var locks = [false, false];
 
@@ -143,9 +150,21 @@
 
     // show current question
     $("#question").on("click", function() {
-      $("#questions").dialog({width:800, height:600});
+      $("#questions").dialog('open');
       channel.emit(strs.showQuestion(), 0);
     });
+
+    dialog = $("#questions").dialog({
+      autoOpen: false,
+      width: 800,
+      height: 600,
+      buttons: {
+        Close: function() {
+          dialog.dialog("close");
+        }
+      }
+    });
+
 
     // show previous question
     $("#previous-question").on('click', function () {
