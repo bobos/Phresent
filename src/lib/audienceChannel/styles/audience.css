@@ -236,7 +236,7 @@ body {
 }
 
 .button-button.skin-question {
-  background-image: url(../images/questionmark.png);
+  background-image: url(../images/question.png);
   background-color: #2aa9e0;
   box-shadow: 0 1px 0 0 #156a8f;
 }
@@ -263,6 +263,16 @@ body {
 
 .button-button.skin-vote {
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8), 0 0 0 4px rgb(210, 136, 247);
+}
+
+.button-button.skin-comment {
+  background-image: url(../images/comment.png);
+  background-color: #2aa9e0;
+  box-shadow: 0 1px 0 0 #156a8f;
+}
+
+.button-button.skin-comment:focus {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8), 0 0 0 4px #2aa9e0;
 }
 
 .button.is-open.is-has-menu > .button-container > .button-button.skin-main_menu,

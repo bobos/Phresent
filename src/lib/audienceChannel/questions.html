@@ -9,49 +9,43 @@
         <script src="/lib/js/jquery-1.11.1.js"></script>
         <script src="/lib/js/jquery-ui.js"></script>
         <script src="/lib/js/strs.js"></script>
+        <link rel="stylesheet" href="/lib/audienceChannel/lib/jquerymobile/jquery.mobile-1.4.5.min.css" />
+        <script src="/lib/audienceChannel/lib/jquerymobile/jquery.mobile-1.4.5.min.js"></script>
+
         <script>
             $(function() {
                 var channel = io(strs.presenterChannel());
 
-                function submitQuestion() {
-                    var content = $( "#content" ).val();
+                $("#submit").on('click', function() {
+                    var content = $( "#question" ).val();
                     channel.emit(strs.submitQuestion(), content);
-                    $( "#content" ).val("");
-                    dialog.dialog( "close" );
-                }
-
-                var dialog;
-                dialog =  $( "#question" ).dialog({
-                    autoOpen: false,
-                    show: {
-                        effect: "blind",
-                        duration: 1000
-                    },
-                    hide: {
-                        effect: "explode",
-                        duration: 1000
-                    },
-                    buttons: {
-                        "Submit": submitQuestion,
-                        Cancel: function() {
-                            $( "#content" ).val("");
-                            dialog.dialog( "close" );
-                        }
-                    }
+                    $( "#question" ).val("");
                 });
 
-            $("#ask").on('click', function(){
-                $( "#question" ).dialog( "open" );
+                // Set limitation for the textarea
+                $('textarea').keypress(function(e) {
+                  var tval = $('textarea').val();
+                  var tlength = tval.length;
+                  var set = 140;
+                  var remain = parseInt(set - tlength);
+                  $('p').text(remain);
+                  if (remain <= 0 && e.which !== 0 && e.charCode !== 0) {
+                    $('textarea').val((tval).substring(0, tlength - 1));
+                  }
+                });
+
+                $("#home").on('click', function() {
+                  window.location.replace('/audienceChannel');
+                });
+
+
             });
-        });
         </script>
     </head>
     <body>
-        <img id="ask" src="/lib/img/question_answer.png"></img>
-        <div id="question">
-            <p>Enter your question!</p>
-            <textarea id="content"></textarea>
-        </div>
+        <textarea id="question" rows="8" placeholder="Input your comment here, less than 140 letters..."></textarea>
+        <button id="submit">Submit</button>
+        <img id="home" src="/lib/audienceChannel/images/home.png"></img>
         <div id="homebar"><a href="/audiencechannel"><i class="fa fa-home fa-5x" id="homeicon"></i></a></div>
     </body>
 </html>
