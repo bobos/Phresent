@@ -15,6 +15,7 @@ var duration = 0;
 var slides = 0;
 var agenda;
 var timer = 0;
+var favourites = {};
 
 var presenterChannel = io.of(strs.presenterChannel());
 var askSlide = strs.loadSlide();
@@ -110,6 +111,7 @@ app.get('/lib/*', function(req, res){
   res.sendFile(__dirname + '/lib/' + req.params[0]);
 });
 
+var audienceChannel = io.of(strs.audienceChannel());
 // ********************************************************
 //  presenter channel
 // ********************************************************
@@ -158,6 +160,10 @@ presenterChannel.on('connection', function(socket){
     console.log(votes);
   });
 
+  socket.on(strs.endVote(), function() {
+    audienceChannel.emit(strs.endVote());
+  });
+
   // status bar
   socket.on(strs.askDuration(), function(){
       socket.emit(strs.setDuration(), duration);
@@ -167,7 +173,6 @@ presenterChannel.on('connection', function(socket){
 // ********************************************************
 // audience channel
 // ********************************************************
-var audienceChannel = io.of(strs.audienceChannel());
 audienceChannel.on('connection', function(socket){
   // load slide request from audience
   socket.on(askSlide, function(num) {
@@ -207,6 +212,26 @@ audienceChannel.on('connection', function(socket){
   socket.on(strs.currentPageNum(), function() {
     socket.emit(strs.currentPageNum(), pageNumber);
   });
+
+  socket.on(strs.plusOne(), function(topic){
+    var address = socket.handshake.address;
+    if (topic in favourites) {
+      if (favourites[topic].indexOf(address) == -1) {
+        favourites[topic].push(address);
+      }
+    }
+    else {
+      favourites[topic] = [address];
+    }
+    console.log(favourites);
+
+  });
+
+  socket.on(strs.currentFavourites(), function() {
+    console.log('Update favourites');
+    socket.emit(strs.currentFavourites(), favourites);
+  });
+
 
 });
 

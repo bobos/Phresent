@@ -1,11 +1,8 @@
 <!doctype html>
 <html class="no-js">
     <head>
-      <style>
-        #home {width:128px; height: 128px;}
-        #agenda {min-width: 800px; min-height: 600px;}
-        .highlight {color: cornflowerblue;}
-      </style>
+    <link rel="stylesheet" href="/lib/audienceChannel/styles/common.css">
+    <link rel="stylesheet" href="/lib/audienceChannel/styles/agenda.css">
       <script src="/lib/js/socket.io-1.2.0.js"></script>
       <script src="/lib/js/jquery-1.11.1.js"></script>
       <script src="/lib/js/strs.js"></script>
@@ -17,14 +14,17 @@
 
         channel.emit(strs.loadAgenda());
         channel.emit(strs.currentPageNum());
+        channel.emit(strs.currentFavourites());
 
         function refresh_agenda(){
           setTimeout(function(){
             channel.emit(strs.currentPageNum());
+            channel.emit(strs.currentFavourites());
             refresh_agenda();
           }, 5000);
         };
         refresh_agenda();
+
 
         function loadAgenda(data, size) {
           var title = new Array();
@@ -32,7 +32,8 @@
           data.forEach(function(subtitle) {
             console.log(size);
             console.log(subtitle['title']);
-            tagStart = "<h" + size.toString() + " id='" + subtitle['title'] + subtitle["start"] + "'>";
+            tagStart = "<h" + size.toString() + " id='" + subtitle['title'] + subtitle["start"] + "' class='topic' name='" + subtitle['title'] + "'>";
+            plusOne = "<div class='plus' id='" + subtitle['title'] + "'name='" + subtitle['title'] + "'>+</div>";
             tagEnd = "</h" + size.toString() + ">";
             indent = Array((size - 1) * 4).join("&nbsp;");
 
@@ -44,7 +45,7 @@
                 catalogueFull[i] = subtitle['title'];
               }
             }
-            $("#agenda").append(tagStart + indent + subtitle['title'] + page + tagEnd);
+            $("#agenda").append(tagStart + indent + plusOne + subtitle['title'] + page + tagEnd);
               if ("children" in subtitle) {
                 loadAgenda(subtitle['children'], size + 1);
               }
@@ -60,6 +61,11 @@
           agenda = JSON.parse(data);
           $("#agenda").html("<h1>" + agenda['title'] + "</h1>");
           loadAgenda(agenda["children"], 2);
+          $(".plus").on('click', function() {
+            var topic = $(this).attr('name');
+            channel.emit(strs.plusOne(), topic);
+          });
+
         });
 
         channel.on(strs.currentPageNum(), function(page) {
@@ -70,6 +76,15 @@
           console.log("Get page update!!!");
           console.log(page);
         });
+
+        channel.on(strs.currentFavourites(), function(favourites) {
+          console.log('Get favourites updated!');
+          for (topic in favourites) { 
+            $("#" + topic).html("+ " + favourites[topic].length);
+          }
+        });
+
+
       </script>
     </head>
     <body>

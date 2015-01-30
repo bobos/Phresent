@@ -1,0 +1,33 @@
+#home{
+  width: 128px;
+  height: 128px;
+}
+
+#previous {
+  background-image: url(/lib/img/previous.png);
+  display: inline-block;
+  width: 44px;
+  height: 44px;
+  outline: none;
+  text-indent: -9999px;
+  margin-top: 0px;
+}
+
+#previous:hover {
+  background-position: 0 -44px;
+}
+
+#next {
+  background-image: url(/lib/img/next.png);
+  display: inline-block;
+  width: 44px;
+  height: 44px;
+  outline: none;
+  text-indent: -9999px;
+  float:right;
+  margin-top: 0px;
+}
+
+#next:hover {
+  background-position: 0 -44px;
+}

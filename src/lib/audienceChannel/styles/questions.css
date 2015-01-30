@@ -1,0 +1,4 @@
+#question {
+  height: auto !important; /* !important is used to force override. */
+  font-size: 300%;
+}

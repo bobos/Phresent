@@ -1,8 +1,7 @@
 <html>
     <head>
-        <style>
-          #home {width:128px; height: 128px;}
-        </style>
+        <link rel="stylesheet" href="/lib/audienceChannel/styles/common.css">
+        <link rel="stylesheet" href="/lib/audienceChannel/styles/vote.css">
         <script src="/lib/js/socket.io-1.2.0.js"></script>
         <script src="/lib/js/jquery-1.11.1.js"></script>
         <script src="/lib/js/strs.js"></script>
@@ -27,6 +26,10 @@
             channel.on(strs.voteOption(), function(votes) {
                 $('#submit').css('display', 'block');
                 presentVoteOptions(votes);
+            });
+            channel.on(strs.endVote(), function() {
+              $("#vote").html("");
+              $("#submit").css("display", "none");
             });
         });
         </script>
