@@ -39,11 +39,16 @@ body {
   top: 0%;
   right: 0%;
 }
+#report {
+  position: absolute;
+  top: 0%;
+  right: 12%;
+}
 
 #number {
   position: absolute;
-  top: 1%;
-  right: 1%;
+  top: 1.1%;
+  right: 3.3%;
   z-index: 9999;
   font-size: 20px;
   border: 3px red solid;
