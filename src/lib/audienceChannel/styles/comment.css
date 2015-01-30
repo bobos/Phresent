@@ -1,4 +1,5 @@
-#home {
-  width: 128px;
-  height: 128px;
+#comment {
+  height: auto !important; /* !important is used to force override. */
+  font-size: 300%;
 }
+
