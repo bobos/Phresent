@@ -10,8 +10,10 @@
 
             $("#submit").on('click', function() {
               var comment = $("#comment").val();
-              channel.emit(strs.comment(), comment);
-              $("#comment").val("");
+              if (comment != "") {
+                channel.emit(strs.comment(), comment);
+                $("#comment").val("");
+              }
             });
 
             // Set limitation for the textarea

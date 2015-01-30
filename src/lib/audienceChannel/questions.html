@@ -17,8 +17,10 @@
 
                 $("#submit").on('click', function() {
                     var content = $( "#question" ).val();
-                    channel.emit(strs.submitQuestion(), content);
-                    $( "#question" ).val("");
+                    if (content != "") {
+                      channel.emit(strs.submitQuestion(), content);
+                      $( "#question" ).val("");
+                    }
                 });
 
                 // Set limitation for the textarea

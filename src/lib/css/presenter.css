@@ -153,3 +153,7 @@ body {
 .ui-dialog-titlebar {
   display: none;
 }
+
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable{
+border: 3px solid #aaaaaa;
+}
