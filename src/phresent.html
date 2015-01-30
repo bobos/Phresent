@@ -13,6 +13,7 @@
   </head>
   <body>
     <img id="vote" src="/lib/img/vote.png" style="width: 3%;"></img>
+    <img id="report-icon" src="/lib/img/vote.png" style="width: 3%;"></img>
     <div id="status-bar">
       <div id="connected">Audience: 0</div>
       <div id="elapsed-time">Elapsed: </div>
@@ -41,6 +42,11 @@
     <div id="comment0"></div>
     <div id="comment1"></div>
     </div>
+    <div id="report">
+      <div id="report-vote"></div>
+      <br /><br />
+      <div id="report-content"></div>
+    </div>
     <script>
     $(document).init(function(){
       if(!("WebSocket" in window))
@@ -63,10 +69,16 @@
 
     var dialog;
     var questionDialog;
+    var voteResultDialog;
     var favourites = {};
     var locks = [false, false];
 
     var duration = 0;
+    var connectedUser = 0;
+    var commentNumber = 0;
+    var elapsedTime = "";
+    var questions = [];
+    var allVotes;
 
 // ****************************************************** 
 // handle loading slides
@@ -94,11 +106,22 @@
 
     dialog = $("#candidates").dialog({
       autoOpen: false,
+      modal: true,
       buttons: {
         "Submit": submitCandidates,
         Cancel: function() {
           $("#content").val("");
-          dialog.dialog("close");
+          $(this).dialog("close");
+        }
+      }
+    });
+
+    voteResultDialog = $("#vote-result").dialog({
+      autoOpen: false,
+      modal: true,
+      buttons: {
+        Close: function() {
+          $(this).dialog("close");
         }
       }
     });
@@ -107,24 +130,26 @@
       channel.emit(strs.endVote());
     });
 
+
     function submitCandidates() {
       var content = $("#content").val();
       channel.emit(strs.initVote(), content);
       $("#content").val("");
-      dialog.dialog("close");
+      $(this).dialog("close");
+      
       //Have a dialog to show the vote result
       $("#vote-result").dialog({width:800, height:600});
     }
 
 
 
-    channel.on(strs.showVotes(), function(votes){
+    channel.on(strs.showVotes(), function(votes){ 
       var dataForShown = new Array();
       for (var key in votes) {
         dataForShown.push([key, votes[key]]);
       }
+      allVotes = dataForShown;
 
-      console.log(dataForShown);
       $.plot("#placeholder", [dataForShown], {
         series: {
           bars: {
@@ -243,20 +268,18 @@
 
     }
     channel.on(strs.showComment(), function(comment) {
+      commentNumber += 1;
       var result = showComment(comment);
       if (result == -1) {
           console.log('Wait!');
-        //  setTimeout(function() { showComment(comment); }, 5000); 
       }
-  //    else {
-//        setTimeout(function() {locks[result]=false; console.log("reset" + result.toString())}, 25000);
-    //  }
     });
 
 // ****************************************************** 
 // status bar
 // ******************************************************
     channel.on(strs.connectedNum(), function(number) {
+      connectedUser = number.toString();
       $("#connected").html("Connected: " + number.toString());
     });
 
@@ -285,12 +308,69 @@
     }
 
     channel.on(strs.elapseTime(), function(number){
-      var elapsedTime = formatTime(number);
+      elapsedTime = formatTime(number);
       var leftTime = formatTime(duration - number);
       $("#elapsed-time").html("Elapsed: " + elapsedTime);
       $("#left-time").html("Left: " + leftTime)
     });
 
+
+// ******************************************
+// Handle post presentation report
+// ******************************************
+
+    $("#report-icon").on("click", function() {
+      channel.emit(strs.getAllQuestions());
+      var content = "";
+      content += "<h3>Connected users: " + connectedUser + "</h3><br />";
+      content += "<h3>" + commentNumber + " comments submitted</h3><br />";
+      content += "<h3>Takes " + elapsedTime + " to finish the presentation</h3><br />";
+      
+
+      if (allVotes != undefined) {
+        $.plot("#report-vote", [allVotes], {
+          series: {
+            bars: {
+              show: true,
+              barWidth: 0.6,                               
+              align: "center",                             
+            },
+          },
+          xaxis: {
+            mode: "categories",                            
+            tickLength: 0,                                 
+         }                                                
+        });
+      }
+      else {
+        $("#report-vote").css("display", "none");
+      }
+
+      content += "<hr>";
+      channel.on(strs.getAllQuestions(), function(questions) {
+        content += "<h3>" + questions.length + " questions are asked:<br /><br />"
+        for (var i = 0; i < questions.length; i++) {
+          content += "<p class='report-question'>" + (i + 1) + ". " + questions[i] + "</p><br >";
+        }
+      var originalContent = $("#report-content").html();
+      $("#report-content").html(content);
+      $("#report").css("display", "block");
+      $("#report").dialog("open");
+
+      });
+    });
+
+    dialog = $("#report").dialog({
+      autoOpen: false,
+      width: 800,
+      height: 600,
+      buttons: {
+        Close: function() {
+          dialog.dialog("close");
+          $("#report").css("display", "none");
+        }
+      }
+    });
     </script>
   </body>
 </html>
