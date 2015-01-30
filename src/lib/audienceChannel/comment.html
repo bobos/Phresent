@@ -10,15 +10,17 @@
 
             $("#submit").on('click', function() {
               var comment = $("#comment").val();
-              channel.emit(strs.comment(), comment);
-              $("#comment").val("");
+              if (comment != "") {
+                channel.emit(strs.comment(), comment);
+                $("#comment").val("");
+              }
             });
 
             // Set limitation for the textarea
             $('textarea').keypress(function(e) {
               var tval = $('textarea').val();
               var tlength = tval.length;
-              var set = 140;
+              var set = 50;
               var remain = parseInt(set - tlength);
               $('p').text(remain);
               if (remain <= 0 && e.which !== 0 && e.charCode !== 0) {
@@ -42,7 +44,7 @@
     <body>
         <textarea id="comment" rows="8" placeholder="Input your comment here, less than 140 letters..."></textarea>
         <br />
-        <button id="submit">Submit</button>
-        <a href="/audiencechannel"><img id="home" src="/lib/audienceChannel/images/home.png"></img></a>
+        <a id="submit" class="ui-btn ui-btn-b">Submit</a>
+        <div id="homebar"><a href="/audiencechannel"><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
     </body>
 </html>
