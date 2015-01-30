@@ -1,6 +1,7 @@
-#agenda {
-  min-width: 800px;
-  min-height: 600px;
+.plus {
+    float: right;
+    width: 20px;
+    height: 20px;
 }
 
 .highlight {
