@@ -50,7 +50,7 @@
 
         var i = 0;
         var space1 = btnHeight+space;
-        var space2 = space*2;
+        var space2 = 0.1*space;
         // creates the menu
         for(var k in btns) {
             var classname = btns[k][0];
@@ -61,7 +61,7 @@
             var classname1 = "."+classname;
             $(classname1).height(btnHeight);
             $(classname1).width(width*0.8);
-            $(classname1).css("top", space1*i+space2);
+            $(classname1).css("top", space1*i-20*space2);
             i++;
         }
 
