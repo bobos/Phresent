@@ -121,6 +121,10 @@
     return 'plus one on topic';
   };
 
+  exports.minusOne = function(){
+    return 'minus one on topic';
+  };
+
   exports.currentFavourites = function(){
     return 'current favourites';
   };
