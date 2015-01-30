@@ -111,6 +111,11 @@ app.get('/lib/*', function(req, res){
   res.sendFile(__dirname + '/lib/' + req.params[0]);
 });
 
+// images, js, css etc for slides.  
+app.get('/slides/*', function(req, res){
+  res.sendFile(__dirname + '/slides/' + req.params[0]);
+});
+
 var audienceChannel = io.of(strs.audienceChannel());
 // ********************************************************
 //  presenter channel
