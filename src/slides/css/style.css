@@ -107,6 +107,16 @@ font-family: 'Chelsea Market', Georgia, serif;
 font-family: 'Chelsea Market', Georgia, serif;
 }
 
+#p_attr8 {
+	margin: 0 auto;
+	color: #000;
+    line-height: 200%;
+    width: 60%;
+    text-align: left;
+    font-size:230%;
+font-family: 'Chelsea Market', Georgia, serif;
+}
+
 a, a:visited {
 	color: #000;
     text-decoration: none;
@@ -181,6 +191,7 @@ a, a:visited {
 .block-add a { color: #FFF; font-size: 100%; font-weight: normal;font-style: normal; background-color: #06406c; padding: 10px 15px; border-radius: 10px; text-decoration: none; }
 .block-remote { background-color: #ffc19f; }
 .block-remote h2 { color: #cc4037; }
+.block-remote a { color: #000; font-size: 100%; font-weight: normal;font-style: normal; background-color: #fff; padding: 10px 15px; border-radius: 10px; text-decoration: none; }
 .block-branching { background-color: #000; }
 .block-branching h2 { color: #FFF; }
 .block-branching p { color: #DDD; }
