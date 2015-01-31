@@ -48,6 +48,8 @@ function load_slide(pageNum, isPresenter, socket) {
     fs.readFile('slides/' + pageNum.toString() + '.html', 'utf-8', function(err, data) {
       // toggle arrow buttons on audience's slide page
       if (isPresenter) {
+        audienceChannel.emit(strs.currentPageNum(), pageNum);
+        audienceChannel.emit(strs.currentFavourites(), favourites);
         pageNumber = pageNum;
       }
       else {
