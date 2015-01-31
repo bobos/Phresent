@@ -39,11 +39,6 @@ body {
   top: 0%;
   right: 0%;
 }
-#report {
-  position: absolute;
-  top: 0%;
-  right: 12%;
-}
 
 #number {
   position: absolute;
@@ -108,7 +103,7 @@ body {
 
 #comment-bar {
   position: absolute;
-  min-height: 150px;
+  min-height: 15%;
   min-width: 100%;
   bottom: 0;
   background-color: gray;
@@ -172,8 +167,7 @@ body {
 #report-icon {
   position: absolute;
   top: 0px;
-  left: 4%;
-  z-index: 99999;
+  right: 12%;
 }
 
 .report-question {
