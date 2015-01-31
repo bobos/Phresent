@@ -12,14 +12,13 @@
     <script src="/lib/js/strs.js"></script>
   </head>
   <body>
-    <img id="vote" src="/lib/img/vote.png" style="width: 3%;"></img>
-    <div id="status-bar">
-      <img id="vote" src="/lib/audienceChannel/images/vote.png" style="width: 3%;"/>
+      <img id="vote" src="/lib/audienceChannel/images/vote.png" style="width: 4.5em;"/>
+      <img id="report-icon" src="/lib/img/report.png" style="width: 4.5em;"/>
+      <img id="question" src="/lib/audienceChannel/images/questionmark.png" style="width: 4.5em;"/>
       <div id="connected">Audience: 0</div>
       <div id="elapsed-time">Elapsed: </div>
       <div id="left-time">Left: </div>
-      <img id="report-icon" src="/lib/img/report.png" style="width: 3%;"/>
-      <img id="question" src="/lib/audienceChannel/images/questionmark.png" style="width: 3%;"/>
+    <div id="status-bar">
     </div>
     <div id="previous"></div>
     <div id="present">html</div>
@@ -186,7 +185,7 @@
       height: 600,
       buttons: {
         Close: function() {
-          dialog.dialog("close");
+          $(this).dialog("close");
         }
       }
     });
