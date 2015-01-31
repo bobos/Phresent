@@ -7,50 +7,108 @@
 
 #body_attr {
 	background: #FFF;
-	font-family: Georgia, Times New Roman, Times, serif;
-	font-size: 30px;
 	text-align: center;
-    margin: 0;
+    margin: 0 auto;
+    width: 100%;
     padding: 0;
 }
 
 #h1_attr {
-	font-size: 60px;
-	font-weight: normal;
-	margin: 0;
     font-family: 'Chelsea Market', Georgia, serif;
+	font-size: 600%;
+	font-weight: normal;
     color: #000;
 	line-height: 1;
 }
 
 #h2_attr {
-font-size: 70px;
+font-size: 500%;
 font-weight: normal;
-margin: 0;
 color: #FFB000;
 font-family: 'Chelsea Market', Georgia, serif;
-text-transform: lowercase;
 }
 
 #h3_attr {
 	font-size: 40px;
 	font-weight: normal;
-	margin: 0;
     margin-top: 40px;
-	text-transform: lowercase;
 }
 
 #p_attr {
-	width: 960px;
-	margin: 40px auto;
+	margin: 0 auto;
 	color: #000;
     line-height: 200%;
+    font-size:-webkit-xxx-large;
+font-family: 'Chelsea Market', Georgia, serif;
+}
+
+#p_attr1 {
+	margin: 0 auto;
+	color: #FFF;
+    line-height: 200%;
+    font-size:-webkit-xxx-large;
+font-family: 'Chelsea Market', Georgia, serif;
+}
+
+#p_attr2 {
+	margin: 0 auto;
+	color: #FFF;
+    line-height: 200%;
+    font-size:-webkit-xxx-large;
+}
+
+#p_attr6 {
+	margin: 0 auto;
+	color: dimgrey;
+    line-height: 200%;
+    width: 60%;
+    text-align: left;
+    font-size:300%;
+font-family: 'Chelsea Market', Georgia, serif;
+}
+
+#p_attr5 {
+	margin: 0 auto;
+	color: #000;
+    line-height: 200%;
+    width: 60%;
+    text-align: left;
+    font-size:300%;
+font-family: 'Chelsea Market', Georgia, serif;
+}
+
+#p_attr4 {
+	margin: 0 auto;
+	color: #4c0d09;
+    line-height: 200%;
+    width: 60%;
+    text-align: left;
+    font-size:300%;
+font-family: 'Chelsea Market', Georgia, serif;
+}
+
+#p_attr3 {
+	margin: 0 auto;
+	color: #cc4037;
+    line-height: 200%;
+    width: 60%;
+    text-align: left;
+    font-size:300%;
+font-family: 'Chelsea Market', Georgia, serif;
+}
+
+#p_attr7 {
+	margin: 0 auto;
+	color: #FFF;
+    line-height: 200%;
+    width: 60%;
+    text-align: left;
+    font-size:300%;
 font-family: 'Chelsea Market', Georgia, serif;
 }
 
 a, a:visited {
 	color: #000;
-    font-size: 12px;
     text-decoration: none;
 }
 
@@ -106,19 +164,21 @@ a, a:visited {
 .block-setup { background-color: #348fd4; }
 .block-setup h2 { color: #06406c; }
 .block-setup h2 a { background: none; padding: 0; font-size: normal; }
-.block-setup a { color: #FFF; font-size: 40px; font-weight: normal;font-style: normal; background-color: #06406c; padding: 10px 15px; border-radius: 10px; text-decoration: none; }
+.block-setup a { color: #FFF; font-size: 100%; font-weight: normal;font-style: normal; background-color: #06406c; padding: 10px 15px; border-radius: 10px; text-decoration: none; }
 .block-create { background-color: #06406c; }
 .block-create h2 { color: #FFF; }
 .block-create p { color: #FFF; }
-.block-create code { background-color: #000; color: #FFF; }
+.block-create a { color: #FFF; font-size: 80%; font-weight: normal;font-style: normal; background-color: black; padding: 10px 15px; border-radius: 10px; text-decoration: none; }
 .block-checkout { background-color: #FFF; }
 .block-checkout h2 { color: #000; }
+.block-checkout code { background-color: #000; color: #FFF; }
 .block-trees { background-color: #4c0d09; }
 .block-trees h2 { color: #d3b2af; }
 .block-trees p { color: #d3b2af; }
 .block-trees code { color: #000; background-color: white; }
 .block-add { background-color: #cc4037; }
 .block-add h2, .block-add p { color: #4c0d09; }
+.block-add a { color: #FFF; font-size: 100%; font-weight: normal;font-style: normal; background-color: #06406c; padding: 10px 15px; border-radius: 10px; text-decoration: none; }
 .block-remote { background-color: #ffc19f; }
 .block-remote h2 { color: #cc4037; }
 .block-branching { background-color: #000; }

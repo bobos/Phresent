@@ -137,4 +137,8 @@
     return 'Get All Votes';
   };
 
+  exports.customEvent = function(){
+    return 'custom event from custom slides';
+  };
+
 }(typeof exports === 'undefined' ? this.strs = {} : exports));
