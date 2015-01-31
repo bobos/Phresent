@@ -1,0 +1,36 @@
+<html class="" lang="en">
+<head>
+  <title>A gentle introduction to SGSN-MME Infra</title>
+  <link rel="stylesheet" href="slides/css/normalize.min.css" type="text/css">
+  <link rel="stylesheet" href="slides/css/style.css" type="text/css">
+  <script src="/lib/js/socket.io-1.2.0.js"></script>
+  <script src="/lib/js/strs.js"></script>
+  <style>
+    body {background-color: #F2F2F2;}
+  </style>
+</head>
+<body id="body_attr">
+   <div class="scrollblock block-tree" style="text-align: center;">
+   <h2 id="h2_attr"><font color=dimgrey>WHEN You Need To Contact Us?</font></h2>
+  <script>
+    var channel_p = io(strs.presenterChannel());
+    var h2 = document.getElementsByTagName('h2');
+    cnt = 2;
+    h2[0].addEventListener('click',function(){ 
+      if (cnt < 6) {
+        cnt += 1;
+        var id = 'p_attr'+String(cnt);
+        channel_p.emit(strs.customEvent(), id);
+      }
+    },false);
+
+    channel_p.on(strs.customEvent(), function(id) {
+        document.getElementById(id).style.display = "-webkit-box"
+    });
+  </script>
+   <p id="p_attr3" style="display: none;" >When you have new requirement</p>
+   <p id="p_attr4" style="display: none;" >When you have found a bug</p>
+   <p id="p_attr5" style="display: none;" >When you need FW support</p>
+   <p id="p_attr6" style="display: none;" >When you really want to buy us a coffee ; )</p>
+   </div>
+</body></html>

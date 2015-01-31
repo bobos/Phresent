@@ -182,6 +182,12 @@ presenterChannel.on('connection', function(socket){
       socket.emit(strs.setDuration(), duration);
   });
 
+  // custom event sent from custom slides, just broadcast it
+  socket.on(strs.customEvent(), function(passOn){
+      presenterChannel.emit(strs.customEvent(), passOn);
+  });
+
+
 });
 
 // ********************************************************
