@@ -5,7 +5,7 @@
   src: local('Chelsea Market'), local('ChelseaMarket-Regular'), url(qSdzwh2A4BbNemy78sJLfBRWMfMQaj_KSrIuqJtfm2o.woff2) format('woff2'), url(qSdzwh2A4BbNemy78sJLfFg5923bhI0e2gp7DBvMMjU.woff) format('woff');
 }
 
-body {
+#body_attr {
 	background: #FFF;
 	font-family: Georgia, Times New Roman, Times, serif;
 	font-size: 30px;
@@ -14,7 +14,7 @@ body {
     padding: 0;
 }
 
-h1 {
+#h1_attr {
 	font-size: 60px;
 	font-weight: normal;
 	margin: 0;
@@ -23,7 +23,7 @@ h1 {
 	line-height: 1;
 }
 
-h2 {
+#h2_attr {
 font-size: 70px;
 font-weight: normal;
 margin: 0;
@@ -32,7 +32,7 @@ font-family: 'Chelsea Market', Georgia, serif;
 text-transform: lowercase;
 }
 
-h3 {
+#h3_attr {
 	font-size: 40px;
 	font-weight: normal;
 	margin: 0;
@@ -40,7 +40,7 @@ h3 {
 	text-transform: lowercase;
 }
 
-p {
+#p_attr {
 	width: 960px;
 	margin: 40px auto;
 	color: #000;
@@ -54,7 +54,7 @@ a, a:visited {
     text-decoration: none;
 }
 
-ul {
+#ul_attr {
 	list-style: none;
 }
 
@@ -62,11 +62,11 @@ ul {
 	padding: 10px;
 }
 
-pre {
+#pre_attr {
 	font-size: 18px;
 }
 
-blockquote {
+#blockquote_attr {
 	text-align: left;
 	width: 720px;
 	margin: 10px auto;
@@ -75,7 +75,7 @@ blockquote {
 	padding: 0 40px;
 }
 
-code {
+#code_attr {
     background-color: #000;
 	font-style: normal;
     border-radius: 10px;
