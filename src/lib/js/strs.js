@@ -15,6 +15,10 @@
     return 'No question has been raised up yet!';
   };
 
+  exports.getAllQuestions = function(){
+    return 'Get all questions';
+  };
+
   // messages from/to audience, let's keep them short
   exports.loadSlide = function(){
     return '1';
@@ -127,6 +131,10 @@
 
   exports.currentFavourites = function(){
     return 'current favourites';
+  };
+
+  exports.getAllVotes = function(){
+    return 'Get All Votes';
   };
 
 }(typeof exports === 'undefined' ? this.strs = {} : exports));
