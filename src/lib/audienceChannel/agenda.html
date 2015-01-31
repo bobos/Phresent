@@ -13,33 +13,22 @@
         var agenda = {};
         var catalogue = {};
         var catalogueFull = {};
+        var prevSelected;
 
         channel.emit(strs.loadAgenda());
         channel.emit(strs.currentPageNum());
         channel.emit(strs.currentFavourites());
 
-        function refresh_agenda(){
-          setTimeout(function(){
-            channel.emit(strs.currentPageNum());
-            channel.emit(strs.currentFavourites());
-            refresh_agenda();
-          }, 5000);
-        };
-        refresh_agenda();
-
-
         function loadAgenda(data, size) {
           var title = new Array();
           console.log(data);
           data.forEach(function(subtitle) {
-            console.log(size);
-            console.log(subtitle['title']);
             indent = (size*15).toString();
             var title_id = subtitle['title'].replace(/ /g, '-');
             title_id = title_id.replace('?', '');
             console.log(title_id);
             divStart = "<a href='#' id='" + title_id + "' class='list marked' style='margin-left:10px;padding-left:" + indent +"px'><div class='list-content'>"
-            content = "<span class='list-title' style='display:inline;font-size:100%'>" + subtitle['title'] + "</span>";
+            content = "<span class='list-title' style='display:inline;font-size:300%'>" + subtitle['title'] + "</span>";
             content += "<span><img class='plus' src='/lib/audienceChannel/images/star.png' name='" + title_id + "'></span>";
             divEnd = "</div></a>"
             //tagStart = "<h" + size.toString() + " id='" + subtitle['title'] + subtitle["start"] + "' class='topic' name='" + subtitle['title'] + "'>";
@@ -68,7 +57,6 @@
         }
 
         channel.on(strs.loadAgenda(), function(data) {
-          console.log(data);
           agenda = JSON.parse(data);
           console.log(agenda['title']);
           $("#agenda").html('<div class="list-content">');
@@ -94,14 +82,12 @@
         channel.on(strs.currentPageNum(), function(page) {
           var title = catalogueFull[page];
           var start = catalogue[title];
-          console.log("#" + title);
           var title_id = title.replace(/ /g, '-');
           title_id = title_id.replace('?', '');
-          console.log("#" + title_id);
-          if (! $("#" + title_id).hasClass("selected")) {
-              $("#" + title_id).addClass("selected");}
-          console.log("Get page update!!!");
-          console.log(page);
+          title_id = "#" + title_id;
+          if ( undefined != prevSelected) $(prevSelected).css("background-color", "white");
+          $(title_id).css("background-color", "antiquewhite");
+          prevSelected = title_id
         });
 
         //channel.on(strs.currentFavourites(), function(favourites) {
@@ -115,7 +101,7 @@
       </script>
     </head>
     <body class="metro">
-    <h1>presentation agenda goes here!</h1>
+    </br>
     <div id="agenda" class="listview-outlook" data-role="listview"></div>
     <div id="homebar"><a href="/audiencechannel"><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
     </body>

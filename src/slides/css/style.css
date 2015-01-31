@@ -28,6 +28,13 @@ color: #FFB000;
 font-family: 'Chelsea Market', Georgia, serif;
 }
 
+#h2_attr1 {
+font-size: 2000%;
+font-weight: normal;
+color: #FFB000;
+font-family: 'Chelsea Market', Georgia, serif;
+}
+
 #h3_attr {
 	font-size: 40px;
 	font-weight: normal;
@@ -39,6 +46,14 @@ font-family: 'Chelsea Market', Georgia, serif;
 	color: #000;
     line-height: 200%;
     font-size:-webkit-xxx-large;
+font-family: 'Chelsea Market', Georgia, serif;
+}
+
+#p_attr0 {
+	margin: 0 auto;
+	color: #FFF;
+    line-height: 200%;
+    font-size: xx-large;
 font-family: 'Chelsea Market', Georgia, serif;
 }
 
@@ -167,6 +182,7 @@ a, a:visited {
 
 }
 
+.block-checkout { background-color: #FFF; }
 .block-title { background-color: #FFF; padding-bottom: 50px; }
 .block-title h2 { color: #000; }
 .block-title .meta { font-size: 16px; color: #999; }
