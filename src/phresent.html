@@ -177,8 +177,7 @@
 
     // show current question
     $("#question").on("click", function() {
-      $("#questions").dialog('open');
-      channel.emit(strs.showQuestion(), 0);
+      channel.emit(strs.openQesDia());
     });
 
     dialog = $("#questions").dialog({
@@ -187,11 +186,10 @@
       height: 600,
       buttons: {
         Close: function() {
-          $(this).dialog("close");
+          channel.emit(strs.closeQesDia());
         }
       }
     });
-
 
     // show previous question
     $("#previous-question").on('click', function () {
@@ -207,26 +205,35 @@
       channel.emit(strs.removeQuestion());
     });
 
-    channel.on(strs.showQuestion(), function(question) {
+    channel.on(strs.openQesDiaS(), function() {
+      $("#questions").dialog('open');
+      channel.emit(strs.showQuestion(), 0);
+    });
+
+    channel.on(strs.closeQesDiaS(), function() {
+      $("#questions").dialog('close');
+    });
+
+    channel.on(strs.showQuestionS(), function(question) {
       $("#present-question").html("<h1>" + question + "</h1>");
     });
 
     channel.on(strs.toggleArrow(), function(msg) {
       if(msg == strs.showArrows()) {
-        $('#previous-question').css('display', 'initial');
-        $('#next-question').css('display', 'initial');
+        $('#previous-question').css('display', 'block');
+        $('#next-question').css('display', 'block');
       }
       if(msg == strs.showNArrow()) {
         $('#previous-question').css('display', 'none');
         $('#next-question').css('display', 'none');
       }
       if(msg == strs.showLArrow()) {
-        $('#previous-question').css('display', 'initial');
+        $('#previous-question').css('display', 'block');
         $('#next-question').css('display', 'none');
       }
       if(msg == strs.showRArrow()) {
         $('#previous-question').css('display', 'none');
-        $('#next-question').css('display', 'initial');
+        $('#next-question').css('display', 'block');
       }
     });
 

@@ -85,6 +85,10 @@
     return 'show question on presentation page';
   };
 
+  exports.showQuestionS = function(){
+    return 'show question on presentation page by Server';
+  };
+
   exports.toggleArrow = function(){
     return 'toggle arrow buttons on page';
   };
@@ -135,6 +139,22 @@
 
   exports.getAllVotes = function(){
     return 'Get All Votes';
+  };
+
+  exports.openQesDia = function(){
+    return 'open question dialog';
+  };
+
+  exports.openQesDiaS = function(){
+    return 'open question dialog asked by Server';
+  };
+
+  exports.closeQesDia = function(){
+    return 'close question dialog';
+  };
+
+  exports.closeQesDiaS = function(){
+    return 'close question dialog asked by Server';
   };
 
   exports.customEvent = function(){
