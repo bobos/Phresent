@@ -22,6 +22,9 @@
         var id = 'p_attr'+String(cnt);
         channel_p.emit(strs.customEvent(), id);
       }
+      else if (cnt == 6) { 
+        cnt += 1; channel_p.emit(strs.customEvent(), "starbuck");
+      }
     },false);
 
     channel_p.on(strs.customEvent(), function(id) {
@@ -32,5 +35,6 @@
    <p id="p_attr4" style="display: none;" >When you have found a bug</p>
    <p id="p_attr5" style="display: none;" >When you need FW support</p>
    <p id="p_attr6" style="display: none;" >When you really want to buy us a coffee ; )</p>
+   <img src="slides/css/starbuck.png" id="starbuck" style="width: 40%; display: none; margin-left: 28%;margin-top: -5%;"/>
    </div>
 </body></html>
