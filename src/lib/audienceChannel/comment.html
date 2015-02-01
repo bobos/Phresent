@@ -20,7 +20,7 @@
             $('textarea').keypress(function(e) {
               var tval = $('textarea').val();
               var tlength = tval.length;
-              var set = 50;
+              var set = 30;
               var remain = parseInt(set - tlength);
               $('p').text(remain);
               if (remain <= 0 && e.which !== 0 && e.charCode !== 0) {
@@ -42,7 +42,7 @@
     </head>
 
     <body>
-        <textarea id="comment" rows="8" placeholder="Input your comment here, less than 140 letters..."></textarea>
+        <textarea id="comment" rows="8" placeholder="Input your comment here, less than 30 letters..."></textarea>
         <br />
         <a id="submit" class="ui-btn ui-btn-b">Submit</a>
         <div id="homebar"><a href="/audiencechannel"><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
