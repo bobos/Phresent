@@ -26,7 +26,7 @@
 
     <div id="number">0</div>
     <div id="candidates">
-      <textarea id="content"></textarea>
+      <textarea id="content" style="margin: 0px; width: 760px; height: 479px;"></textarea>
     </div>
     <div id="vote-result">
       <div id="placeholder"></div>
@@ -105,6 +105,8 @@
     });
 
     dialog = $("#candidates").dialog({
+      width: 800,
+      height: 600,
       autoOpen: false,
       modal: true,
       buttons: {
@@ -250,13 +252,13 @@
     function showComment(comment){
       var choice = chooseCommentBar();
       if (choice == 0) {
-        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee bgcolor='#0000040' width='100%' loop='1' scrollamount='25'><strong>" + comment + "<strong></marquee></font>");
+        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee width='100%' loop='1' scrollamount='25'><strong>" + comment + "<strong></marquee></font>");
         setTimeout(function() {locks[choice]=false; console.log("reset" + choice.toString())}, 25000);
         console.log("1st comment");
         return choice;
       }
       else if (choice == 1) {
-        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee bgcolor='#0000040' width='100%' loop='1' scrollamount='25'><strong>" + comment + "<strong></marquee></font>");
+        $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee width='100%' loop='1' scrollamount='25'><strong>" + comment + "<strong></marquee></font>");
         setTimeout(function() {locks[choice]=false; console.log("reset" + choice.toString())}, 25000);
         console.log("2nd comment");
         return choice;
