@@ -68,11 +68,11 @@ function sentQuestion(num) {
   if(len == 0) {
     // empty question dialog
     presenterChannel.emit(strs.toggleArrow(), strs.showNArrow());
-    presenterChannel.emit(strs.showQuestion(), strs.noQuestion());
+    presenterChannel.emit(strs.showQuestionS(), strs.noQuestion());
   }
   else {
     questionCounter += num;
-    presenterChannel.emit(strs.showQuestion(), questions[questionCounter]);
+    presenterChannel.emit(strs.showQuestionS(), questions[questionCounter]);
     presenterChannel.emit(strs.toggleArrow(), toggleArrowMsg(questionCounter, len-1));
   }
 }
@@ -135,6 +135,14 @@ presenterChannel.on('connection', function(socket){
     console.log(question);
     presenterChannel.emit(strs.setQesNum(), questions.length);
     });
+
+  socket.on(strs.openQesDia(), function() {
+    presenterChannel.emit(strs.openQesDiaS());
+  });
+
+  socket.on(strs.closeQesDia(), function() {
+    presenterChannel.emit(strs.closeQesDiaS());
+  });
 
   socket.on(strs.removeQuestion(), function() {
     var len = questions.length - 1;
