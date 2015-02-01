@@ -143,15 +143,13 @@
       $("#vote-result").dialog({width:800, height:600});
     }
 
-
-
     channel.on(strs.showVotes(), function(votes){ 
       var dataForShown = new Array();
       for (var key in votes) {
         dataForShown.push([key, votes[key]]);
       }
       allVotes = dataForShown;
-
+      
       $.plot("#placeholder", [dataForShown], {
         series: {
           bars: {
@@ -242,7 +240,6 @@
 // ******************************************************
     function unlock(number) {
       locks[number] = false;
-      console.log("Unlock!");
     }
 
     function chooseCommentBar(){
@@ -252,29 +249,24 @@
       }
       return result;
     }
-    $("marquee").on("finish", function(){
-      console.log("FInished!");
-    });
+    $("marquee").on("finish", function(){});
 
     function showComment(comment){
       var choice = chooseCommentBar();
       if (choice == 0) {
         $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee width='100%' loop='1' scrollamount='25'><strong>" + comment + "<strong></marquee></font>");
-        setTimeout(function() {locks[choice]=false; console.log("reset" + choice.toString())}, 25000);
-        console.log("1st comment");
+        setTimeout(function() {locks[choice]=false}, 5000);
         return choice;
       }
       else if (choice == 1) {
         $("#comment" + choice.toString()).html("<font color='#ffffff' size='50px'><marquee width='100%' loop='1' scrollamount='25'><strong>" + comment + "<strong></marquee></font>");
-        setTimeout(function() {locks[choice]=false; console.log("reset" + choice.toString())}, 25000);
-        console.log("2nd comment");
+        setTimeout(function() {locks[choice]=false}, 5000);
         return choice;
       }
       else {
-        setTimeout(function() {showComment(comment);}, 5000);
+        setTimeout(function() {showComment(comment)}, 1000);
         return -1;
       }
-
     }
     channel.on(strs.showComment(), function(comment) {
       commentNumber += 1;
