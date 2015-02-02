@@ -181,6 +181,7 @@ presenterChannel.on('connection', function(socket){
 
   socket.on(strs.endVote(), function() {
     audienceChannel.emit(strs.endVote());
+    presenterChannel.emit(strs.endVoteS());
   });
 
   socket.on(strs.getAllVotes(), function() {

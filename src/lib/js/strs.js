@@ -141,6 +141,10 @@
     return 'Get All Votes';
   };
 
+  exports.endVoteS = function(){
+    return 'Close Vote Window Asked by Server';
+  };
+
   exports.openQesDia = function(){
     return 'open question dialog';
   };

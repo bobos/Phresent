@@ -125,15 +125,10 @@
       height: 600,
       buttons: {
         Close: function() {
-          $(this).dialog("close");
+          channel.emit(strs.endVote());
         }
       }
     });
-
-    $('div#vote-result').on('dialogclose', function(event) {
-      channel.emit(strs.endVote());
-    });
-
 
     function submitCandidates() {
       var content = $("#content").val();
@@ -142,6 +137,10 @@
       $(this).dialog("close");
       
     }
+
+    channel.on(strs.endVoteS(), function(){ 
+      $("#vote-result").dialog("close");
+    });
 
     channel.on(strs.showVotes(), function(votes){ 
       //Have a dialog to show the vote result
