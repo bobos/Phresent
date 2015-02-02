@@ -141,11 +141,12 @@
       $("#content").val("");
       $(this).dialog("close");
       
-      //Have a dialog to show the vote result
-      $("#vote-result").dialog("open");
     }
 
     channel.on(strs.showVotes(), function(votes){ 
+      //Have a dialog to show the vote result
+      $("#vote-result").dialog("open");
+
       var dataForShown = new Array();
       for (var key in votes) {
         dataForShown.push([key, votes[key]]);
