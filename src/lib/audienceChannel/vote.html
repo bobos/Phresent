@@ -9,6 +9,7 @@
         <script>
         $(document).init(function() {
             var channel = io(strs.audienceChannel());
+            var isVoted = false;
 
             function presentVoteOptions(votes){
                 for (var option in votes) {
@@ -20,7 +21,16 @@
 
             $("#submit").on('click', function() {
                 var selection = $('input[name=vote]:checked').val();
+                if (!selection) {
+                  alert('Vote is not started yet!');
+                  return;
+                }
+                if (isVoted) {
+                  alert("You've already voted!");
+                }
                 channel.emit(strs.vote(), selection);
+                isVoted = true;
+                alert('Your vote is submitted!');
             });
 
             channel.emit(strs.voteOption());

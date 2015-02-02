@@ -16,6 +16,7 @@ var slides = 0;
 var agenda;
 var timer = 0;
 var favourites = {};
+var voteEnded = false;
 
 var presenterChannel = io.of(strs.presenterChannel());
 var askSlide = strs.loadSlide();
@@ -180,6 +181,7 @@ presenterChannel.on('connection', function(socket){
   });
 
   socket.on(strs.endVote(), function() {
+    voteEnded = true;
     audienceChannel.emit(strs.endVote());
     presenterChannel.emit(strs.endVoteS());
   });
@@ -216,12 +218,13 @@ audienceChannel.on('connection', function(socket){
       votes[vote] += 1;
       votedAddress.push(address);
     }
-    console.log(votes);
     presenterChannel.emit(strs.showVotes(), votes);
   });
 
   socket.on(strs.voteOption(), function() {
-    socket.emit(strs.voteOption(), votes);
+    if (!voteEnded) {
+      socket.emit(strs.voteOption(), votes);
+    }
   });
 
   socket.on(strs.comment(), function(comment) {
