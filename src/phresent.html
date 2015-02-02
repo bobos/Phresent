@@ -121,6 +121,8 @@
     voteResultDialog = $("#vote-result").dialog({
       autoOpen: false,
       modal: true,
+      width: 800,
+      height: 600,
       buttons: {
         Close: function() {
           $(this).dialog("close");
@@ -140,7 +142,7 @@
       $(this).dialog("close");
       
       //Have a dialog to show the vote result
-      $("#vote-result").dialog({width:800, height:600});
+      $("#vote-result").dialog("open");
     }
 
     channel.on(strs.showVotes(), function(votes){ 
