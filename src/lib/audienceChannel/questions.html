@@ -14,10 +14,13 @@
         <script>
             $(function() {
                 var channel = io(strs.presenterChannel());
+                var aChannel = io(strs.audienceChannel());
+                aChannel.emit(strs.connect());
 
                 $("#submit").on('click', function() {
                     var content = $( "#question" ).val();
                     if (content != "") {
+                      content = content.substring(0, 140);
                       channel.emit(strs.submitQuestion(), content);
                       $( "#question" ).val("");
                     }

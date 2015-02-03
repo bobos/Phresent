@@ -15,6 +15,7 @@
         var catalogueFull = {};
         var prevSelected;
 
+        channel.emit(strs.connect());
         channel.emit(strs.loadAgenda());
         channel.emit(strs.currentPageNum());
         channel.emit(strs.currentFavourites());
