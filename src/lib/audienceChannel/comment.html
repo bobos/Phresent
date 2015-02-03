@@ -30,6 +30,7 @@
 
             // Go to home page
             $("#homeicon").on('click', function() {
+              channel.disconnect();
               window.location.replace('/audienceChannel');
             });
             
@@ -44,6 +45,6 @@
     <body>
         <textarea id="comment" rows="8" placeholder="Input your comment here, less than 30 letters..."></textarea>
         <a id="submit" class="ui-btn ui-btn-b" style="font-size: 300%;">Submit</a>
-        <div id="homebar"><a href="/audiencechannel"><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
+        <div id="homebar"><a><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
     </body>
 </html>
