@@ -36,6 +36,7 @@
                 });
 
                 $("#homeicon").on('click', function() {
+                  channel.disconnect();
                   window.location.replace('/audienceChannel');
                 });
 
@@ -47,6 +48,6 @@
         <textarea id="question" rows="8" placeholder="Input your question here, less than 140 letters..."></textarea>
         <a id="submit" class="ui-btn ui-btn-b" style="font-size: 300%;">Submit</a>
         <img id="home" src="/lib/audienceChannel/images/home.png"></img>
-        <div id="homebar"><a href="/audiencechannel"><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
+        <div id="homebar"><a><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
     </body>
 </html>

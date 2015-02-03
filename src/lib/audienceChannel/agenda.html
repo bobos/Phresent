@@ -97,12 +97,17 @@
           //}
         //});
 
+        // Go to home page
+        $("#homeicon").on('click', function() {
+          channel.disconnect();
+          window.location.replace('/audienceChannel');
+        });
 
       </script>
     </head>
     <body class="metro">
     </br>
     <div id="agenda" class="listview-outlook" data-role="listview"></div>
-    <div id="homebar"><a href="/audiencechannel"><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
+    <div id="homebar"><a><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
     </body>
 </html>
