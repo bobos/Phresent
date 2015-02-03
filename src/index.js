@@ -105,7 +105,7 @@ app.get('/vote', function(req, res){
   res.sendFile(__dirname + '/vote.html');
 });
 
-app.get('/audienceChannel', function(req, res){
+app.get('/', function(req, res){
   res.sendFile(__dirname + '/audience.html');
 });
 
@@ -232,6 +232,7 @@ audienceChannel.on('connection', function(socket){
   });
 
   socket.on(strs.connect(), function() {
+    console.log('Connected');
     var address = socket.handshake.address
     if (connected.indexOf(address) == -1) {
       connected.push(address);
@@ -248,6 +249,7 @@ audienceChannel.on('connection', function(socket){
   });
 
   socket.on(strs.plusOne(), function(topic){
+    console.log('Hi!');
     var address = socket.handshake.address;
     if (topic in favourites) {
       if (favourites[topic].indexOf(address) == -1) {

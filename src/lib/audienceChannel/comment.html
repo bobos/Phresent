@@ -7,10 +7,12 @@
         <script>
         $(document).init(function() {
             var channel = io(strs.audienceChannel());
+            channel.emit(strs.connect());
 
             $("#submit").on('click', function() {
               var comment = $("#comment").val();
               if (comment != "") {
+                comment = comment.substring(0, 30);
                 channel.emit(strs.comment(), comment);
                 $("#comment").val("");
               }

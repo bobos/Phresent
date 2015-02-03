@@ -9,6 +9,8 @@
         <script>
         $(document).init(function() {
             var channel = io(strs.audienceChannel());
+            channel.emit(strs.connect());
+
             var isVoted = false;
 
             function presentVoteOptions(votes){

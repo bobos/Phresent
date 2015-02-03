@@ -3,6 +3,11 @@
   <head>
     <link rel="stylesheet" href="/lib/audienceChannel/styles/common.css">
     <link rel="stylesheet" href="/lib/audienceChannel/styles/codex.css">
+    <script src="/lib/js/strs.js"></script>
+    <script>
+      var channel = io(strs.audienceChannel());
+      channel.emit(strs.connect());
+    </script>
   </head>
     <body>
     <h3>Redmine:</h3>Redmine is a flexible project management web application, which is used by Infra for task management, where it is(save it):</br><b>https://pdupc-redmine.mo.sw.ericsson.se/projects/sgsn-infra/issues</b>

@@ -19,10 +19,11 @@
     <body>
         <noscript><p>Please turn on Javascript to use this page</p></noscript>
         <script>
-            var channel = io(strs.audienceChannel());
+
 ;(function ( window, document, Btn, FastClick, undefined) {
     'use strict';
 
+            var channel = io(strs.audienceChannel());
 
 
     // Used for creating alert messages popups for button
@@ -108,11 +109,12 @@
 
 
 } (window, document, Btn, FastClick) );
+
           if (! ((Modernizr.cssanimations) && ('classList' in document.documentElement)) ) {
               document.write( '<p>You are using an <strong>outdated</strong> browser. Please upgrade your browser to improve your experience.</p>' );
           }
 
-          $(document).init(function(){
+/*          $(document).init(function(){
             if(!("WebSocket" in window))
             {
               alert("OOPS your browser does NOT support websocket, Phresent won't " +
@@ -121,8 +123,7 @@
                     "Your browser information:" + navigator.userAgent)
             }
 
-            channel.emit(strs.connect());
-          });
+          });*/
 
         </script>
         <main id="main" class="main"></main>
