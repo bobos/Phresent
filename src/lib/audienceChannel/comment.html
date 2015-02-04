@@ -7,10 +7,12 @@
         <script>
         $(document).init(function() {
             var channel = io(strs.audienceChannel());
+            channel.emit(strs.connect());
 
             $("#submit").on('click', function() {
               var comment = $("#comment").val();
               if (comment != "") {
+                comment = comment.substring(0, 30);
                 channel.emit(strs.comment(), comment);
                 $("#comment").val("");
               }
@@ -20,7 +22,7 @@
             $('textarea').keypress(function(e) {
               var tval = $('textarea').val();
               var tlength = tval.length;
-              var set = 50;
+              var set = 30;
               var remain = parseInt(set - tlength);
               $('p').text(remain);
               if (remain <= 0 && e.which !== 0 && e.charCode !== 0) {
@@ -30,6 +32,7 @@
 
             // Go to home page
             $("#homeicon").on('click', function() {
+              channel.disconnect();
               window.location.replace('/audienceChannel');
             });
             
@@ -42,9 +45,10 @@
     </head>
 
     <body>
-        <textarea id="comment" rows="8" placeholder="Input your comment here, less than 140 letters..."></textarea>
-        <br />
-        <a id="submit" class="ui-btn ui-btn-b">Submit</a>
-        <div id="homebar"><a href="/audiencechannel"><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
+        <textarea id="comment" rows="8" placeholder="Input your comment here, less than 30 letters..."></textarea>
+        <a id="submit" class="ui-btn ui-btn-b" style="font-size: 300%;">Submit</a>
+<!--
+        <div id="homebar"><a><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
+-->
     </body>
 </html>

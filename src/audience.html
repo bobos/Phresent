@@ -12,7 +12,6 @@
         <script src="/lib/audienceChannel/scripts/vendor/modernizr.js"></script>
         <script src="/lib/audienceChannel/scripts/vendor/fastclick.js"></script>
         <script src="/lib/audienceChannel/scripts/btns.js"></script>
-        <script src="/lib/audienceChannel/scripts/main.js"></script>
         <script src="/lib/js/socket.io-1.2.0.js"></script>
         <script src="/lib/js/jquery-1.11.1.js"></script>
         <script src="/lib/js/strs.js"></script>
@@ -20,11 +19,102 @@
     <body>
         <noscript><p>Please turn on Javascript to use this page</p></noscript>
         <script>
+
+;(function ( window, document, Btn, FastClick, undefined) {
+    'use strict';
+
+            var channel = io(strs.audienceChannel());
+
+
+    // Used for creating alert messages popups for button
+    function alertEvent( title ) {
+        return function() { window.alert( title ); };
+    }
+
+
+
+    // Used for creating links for button
+    function linkEvent( link ) {
+        channel.disconnect();
+        return function() { window.location.href = link; };
+    }
+
+
+
+    // remove CSS that makes the menu invisible onload
+    function removeIsMainInvisble() {
+        document.documentElement.classList.remove('is-main-invisible');
+    }
+
+
+    // The functions that run after `DOMContetedLoaded`
+    function onload() {
+        // fast click for iOS / Android
+        if ( document.documentElement.classList.contains('touch-fix') ) FastClick.attach(document.body);
+        var width = $(window).width();
+        var height = $(window).height();
+        var btns = {
+                     'Presenter':     ['skin-presenter', '/lib/audienceChannel/presenter.html'], 
+                     'Slides':        ['skin-slides', '/lib/audienceChannel/slides.html'], 
+                     'Agenda':        ['skin-agenda', '/lib/audienceChannel/agenda.html'], 
+                     'Codex':         ['skin-codex', '/lib/audienceChannel/codex.html'], 
+                     'Questions':     ['skin-question', '/lib/audienceChannel/questions.html'],
+                     'Vote':          ['skin-vote', '/lib/audienceChannel/vote.html'],
+                     'Comment':       ['skin-comment', '/lib/audienceChannel/comment.html'],
+                   };
+        var btnNum = Object.keys(btns).length;
+        var btnHeight = height/(btnNum+1);
+        var space = btnHeight/(btnNum+1);
+
+        var i = 0;
+        var space1 = btnHeight+space;
+        var space2 = 0.1*space;
+        // creates the menu
+        for(var k in btns) {
+            var classname = btns[k][0];
+            var link = btns[k][1];
+            // add button
+            new Btn(k).addClass(classname).on( 'click', linkEvent(link)).appendTo('#main');
+            // adjust button size
+            var classname1 = "."+classname;
+            $(classname1).height(btnHeight);
+            $(classname1).width(width*0.8);
+            $(classname1).css("top", space1*i-20*space2);
+            i++;
+        }
+
+        // remove the class that makes the menu invisible
+        if ('requestAnimationFrame' in window) {
+            window.requestAnimationFrame( removeIsMainInvisble );
+        } else if ('webkitRequestAnimationFrame' in window) {
+            window.webkitRequestAnimationFrame( removeIsMainInvisble );
+        } else {
+            window.setTimeout( removeIsMainInvisble, 0 );
+        }
+    }
+
+
+
+    // the init function - also call it self
+    (function init() {
+        // iOS / Android - touch hack fix by sniff user agent - maybe better to use modernizr touch event detect - but not sure it's a problem of all Webkit
+        document.documentElement.className += ((/(like Mac OS X)|(Android)/i.test(window.navigator.userAgent)) ? ' touch-fix' : ' no-touch-fix');
+
+        // Makes the menu invisible for fading in animation
+        document.documentElement.className += ' is-main-invisible';
+
+        // Makes sure everything is work when blocking render
+        document.addEventListener( 'DOMContentLoaded', onload, false );
+    } ());
+
+
+} (window, document, Btn, FastClick) );
+
           if (! ((Modernizr.cssanimations) && ('classList' in document.documentElement)) ) {
               document.write( '<p>You are using an <strong>outdated</strong> browser. Please upgrade your browser to improve your experience.</p>' );
           }
 
-          $(document).init(function(){
+/*          $(document).init(function(){
             if(!("WebSocket" in window))
             {
               alert("OOPS your browser does NOT support websocket, Phresent won't " +
@@ -33,10 +123,7 @@
                     "Your browser information:" + navigator.userAgent)
             }
 
-            var channel = io(strs.audienceChannel());
-
-            channel.emit(strs.connect());
-          });
+          });*/
 
         </script>
         <main id="main" class="main"></main>

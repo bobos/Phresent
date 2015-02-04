@@ -5,16 +5,12 @@ agenda = {
     'slides': '12',
     'title': 'A Gentle Introduction to SGSN-MME Infra',
     'children': [
-        {'title': 'Who Are SGSN-MME Infra?', 'start': 2, 'end': 3},
-        {'title': 'What SGSN-MME Infra Support?', 'start': 4, 'end': 4},
-        {'title': 'When You Need To Contact Infra?', 'start': 5, 'end': 5},
-        {'title': 'How To Contact Infra', 'children':
-            [
-                {'title': 'Handle New Requirement', 'start': '6', 'end': '8'},
-                {'title': 'Handle Bug', 'start': '9', 'end': '9'},
-                {'title': 'Handle Support', 'start': '10', 'end': '10'},
-            ]},
-        {'title': 'Infra Under The Hood', 'start': 11, 'end': 11},
+        {'title': 'Who Are SGSN-MME Infra', 'start': 1, 'end': 5},
+        {'title': 'What SGSN-MME Infra Support', 'start': 6, 'end': 6},
+        {'title': 'When You Need To Contact Infra', 'start': 7, 'end': 7},
+        {'title': 'How To Contact Infra', 'start': 8, 'end': 8},
+        {'title': 'How To Use Redmine', 'start': 9, 'end': 9},
+        {'title': 'How Proposal Is Handled', 'start': 10, 'end': 11},
         {'title': 'Question And Answer', 'start': 12, 'end': 12},
     ],
 }

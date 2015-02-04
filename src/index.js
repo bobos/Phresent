@@ -16,6 +16,7 @@ var slides = 0;
 var agenda;
 var timer = 0;
 var favourites = {};
+var voteEnded = false;
 
 var presenterChannel = io.of(strs.presenterChannel());
 var askSlide = strs.loadSlide();
@@ -48,6 +49,8 @@ function load_slide(pageNum, isPresenter, socket) {
     fs.readFile('slides/' + pageNum.toString() + '.html', 'utf-8', function(err, data) {
       // toggle arrow buttons on audience's slide page
       if (isPresenter) {
+        audienceChannel.emit(strs.currentPageNum(), pageNum);
+        audienceChannel.emit(strs.currentFavourites(), favourites);
         pageNumber = pageNum;
       }
       else {
@@ -66,11 +69,11 @@ function sentQuestion(num) {
   if(len == 0) {
     // empty question dialog
     presenterChannel.emit(strs.toggleArrow(), strs.showNArrow());
-    presenterChannel.emit(strs.showQuestion(), strs.noQuestion());
+    presenterChannel.emit(strs.showQuestionS(), strs.noQuestion());
   }
   else {
     questionCounter += num;
-    presenterChannel.emit(strs.showQuestion(), questions[questionCounter]);
+    presenterChannel.emit(strs.showQuestionS(), questions[questionCounter]);
     presenterChannel.emit(strs.toggleArrow(), toggleArrowMsg(questionCounter, len-1));
   }
 }
@@ -102,7 +105,7 @@ app.get('/vote', function(req, res){
   res.sendFile(__dirname + '/vote.html');
 });
 
-app.get('/audienceChannel', function(req, res){
+app.get('/', function(req, res){
   res.sendFile(__dirname + '/audience.html');
 });
 
@@ -133,6 +136,14 @@ presenterChannel.on('connection', function(socket){
     console.log(question);
     presenterChannel.emit(strs.setQesNum(), questions.length);
     });
+
+  socket.on(strs.openQesDia(), function() {
+    presenterChannel.emit(strs.openQesDiaS());
+  });
+
+  socket.on(strs.closeQesDia(), function() {
+    presenterChannel.emit(strs.closeQesDiaS());
+  });
 
   socket.on(strs.removeQuestion(), function() {
     var len = questions.length - 1;
@@ -170,7 +181,9 @@ presenterChannel.on('connection', function(socket){
   });
 
   socket.on(strs.endVote(), function() {
+    voteEnded = true;
     audienceChannel.emit(strs.endVote());
+    presenterChannel.emit(strs.endVoteS());
   });
 
   socket.on(strs.getAllVotes(), function() {
@@ -181,6 +194,12 @@ presenterChannel.on('connection', function(socket){
   socket.on(strs.askDuration(), function(){
       socket.emit(strs.setDuration(), duration);
   });
+
+  // custom event sent from custom slides, just broadcast it
+  socket.on(strs.customEvent(), function(passOn){
+      presenterChannel.emit(strs.customEvent(), passOn);
+  });
+
 
 });
 
@@ -199,12 +218,13 @@ audienceChannel.on('connection', function(socket){
       votes[vote] += 1;
       votedAddress.push(address);
     }
-    console.log(votes);
     presenterChannel.emit(strs.showVotes(), votes);
   });
 
   socket.on(strs.voteOption(), function() {
-    socket.emit(strs.voteOption(), votes);
+    if (!voteEnded) {
+      socket.emit(strs.voteOption(), votes);
+    }
   });
 
   socket.on(strs.comment(), function(comment) {
@@ -212,6 +232,7 @@ audienceChannel.on('connection', function(socket){
   });
 
   socket.on(strs.connect(), function() {
+    console.log('Connected');
     var address = socket.handshake.address
     if (connected.indexOf(address) == -1) {
       connected.push(address);
@@ -228,6 +249,7 @@ audienceChannel.on('connection', function(socket){
   });
 
   socket.on(strs.plusOne(), function(topic){
+    console.log('Hi!');
     var address = socket.handshake.address;
     if (topic in favourites) {
       if (favourites[topic].indexOf(address) == -1) {

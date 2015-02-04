@@ -2,24 +2,39 @@
     <head>
         <link rel="stylesheet" href="/lib/audienceChannel/styles/common.css">
         <link rel="stylesheet" href="/lib/audienceChannel/styles/vote.css">
+        <link rel="stylesheet" href="/lib/audienceChannel/lib/jquerymobile/jquery.mobile-1.4.5.min.css" />
         <script src="/lib/js/socket.io-1.2.0.js"></script>
         <script src="/lib/js/jquery-1.11.1.js"></script>
         <script src="/lib/js/strs.js"></script>
         <script>
         $(document).init(function() {
             var channel = io(strs.audienceChannel());
+            channel.emit(strs.connect());
+
+            var isVoted = false;
 
             function presentVoteOptions(votes){
+                var i=1;
                 for (var option in votes) {
                     console.log(option);
-                    $("#vote").append("<input type='radio' name='vote' value='" + option + "'>" + option + "</input>");
+                    $("#vote").append("<div id='radio'><input type='radio' class='radio' id='radio" +i.toString() + "' name='vote' value='" + option + "'/><label id='label' for='radio" + i.toString() +"' >" + option + "</label></div>");
+                    i = i + 1;
                     $("#vote").append("<br />");
                 }
             }
 
             $("#submit").on('click', function() {
                 var selection = $('input[name=vote]:checked').val();
+                if (!selection) {
+                  alert('Vote is not started yet!');
+                  return;
+                }
+                if (isVoted) {
+                  alert("You've already voted!");
+                }
                 channel.emit(strs.vote(), selection);
+                isVoted = true;
+                alert('Your vote is submitted!');
             });
 
             channel.emit(strs.voteOption());
@@ -37,8 +52,10 @@
 
     <body>
         <h1>Vote</h1>
-        <div id="vote"></div>
-        <button id="submit" style="display: none;">Submit</button>
-        <div id="homebar"><a href="/audiencechannel"><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
+        <div id="vote" style="margin-bottom:100px"></div>
+        <button id="submit" class="ui-btn ui-btn-b" style="display: none; font-size: 300%;">Submit</button>
+<!--
+        <div id="homebar"><a><img id="homeicon" src="/lib/audienceChannel/images/home.png" id="homeicon"/></a></div>
+-->
     </body>
 </html>
