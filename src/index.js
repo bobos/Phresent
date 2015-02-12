@@ -280,6 +280,19 @@ audienceChannel.on('connection', function(socket){
     socket.emit(strs.currentFavourites(), favourites);
   });
 
+  socket.on(strs.personalFavourites(), function() {
+    console.log('Personal favourites');
+    personal_favourites = new Array();
+    var address = socket.handshake.address;
+    for (topic in favourites) {
+      var id = favourites[topic].indexOf(address);
+      if (id != -1) {
+        personal_favourites.push(topic);
+      }
+    }
+    socket.emit(strs.personalFavourites(), personal_favourites);
+  });
+
 
 });
 

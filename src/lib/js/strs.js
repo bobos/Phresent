@@ -137,6 +137,10 @@
     return 'current favourites';
   };
 
+  exports.personalFavourites = function(){
+    return 'personal favourites';
+  };
+
   exports.getAllVotes = function(){
     return 'Get All Votes';
   };
