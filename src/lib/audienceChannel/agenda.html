@@ -19,6 +19,7 @@
         channel.emit(strs.loadAgenda());
         channel.emit(strs.currentPageNum());
         channel.emit(strs.currentFavourites());
+        channel.emit(strs.personalFavourites());
 
         function loadAgenda(data, size) {
           var title = new Array();
@@ -91,6 +92,11 @@
           prevSelected = title_id
         });
 
+        channel.on(strs.personalFavourites(), function(favourites) {
+            for (topic in favourites) {
+                $("img[name='"+favourites[topic]+"']").attr('src', '/lib/audienceChannel/images/star_1.png');
+            }
+        });
         //channel.on(strs.currentFavourites(), function(favourites) {
           //console.log('Get favourites updated!');
           //for (topic in favourites) { 
